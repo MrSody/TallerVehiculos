@@ -8,7 +8,7 @@ namespace TallerVehiculos.Models
         public int Id { get; set; }
         [Required]
         [MaxLength(50, ErrorMessage = "el campo {0} debe contener almenos un caracter")]
-        public string Nombre { get; set; }      
+        public string Nombre { get; set; }
         public int nit { get; set; }
         public string correo { get; set; }
 

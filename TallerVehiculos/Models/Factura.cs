@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace TallerVehiculos.Models
@@ -10,11 +11,8 @@ namespace TallerVehiculos.Models
         [Required]
         [MaxLength(50, ErrorMessage = "el campo {0} debe contener almenos un caracter")]
         public string fecha { get; set; }
-        public string nombrePropietario { get; set; }
         public double total { get; set; }
         public ICollection<DetalleFactura> detalleFacturas { get; set; }
-
-
 
     }
 }

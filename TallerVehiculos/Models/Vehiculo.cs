@@ -11,14 +11,10 @@ namespace TallerVehiculos.Models
         [MaxLength(50, ErrorMessage = "el campo {0} debe contener almenos un caracter")]
 
         public string placa { get; set; }
-      
+
 
         public string tipo { get; set; }
         public string modelo { get; set; }
-
-       
-
-
 
     }
 }
