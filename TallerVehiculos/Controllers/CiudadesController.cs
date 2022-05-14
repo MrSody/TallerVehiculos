@@ -22,7 +22,7 @@ namespace TallerVehiculos.Controllers
         // GET: Ciudades
         public async Task<IActionResult> Index()
         {
-              return View(await _context.ciudades.ToListAsync());
+              return View(await _context.ciudades.Include(c => c.sedes).ToListAsync());
         }
 
         // GET: Ciudades/Details/5
@@ -34,6 +34,8 @@ namespace TallerVehiculos.Controllers
             }
 
             var ciudades = await _context.ciudades
+                .Include(c => c.sedes)
+                .ThenInclude(d => d.usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ciudades == null)
             {
@@ -58,9 +60,25 @@ namespace TallerVehiculos.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(ciudades);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(ciudades);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "hay un registro con el mismo nombre.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                    }
+                }
+
+                catch (Exception exception) { ModelState.AddModelError(string.Empty, exception.Message); }
             }
             return View(ciudades);
         }
@@ -99,19 +117,21 @@ namespace TallerVehiculos.Controllers
                 {
                     _context.Update(ciudades);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException dbUpdateException)
                 {
-                    if (!CiudadesExists(ciudades.Id))
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        return NotFound();
+                        ModelState.AddModelError(string.Empty, "hay un registro con el mismo nombre.");
                     }
                     else
                     {
-                        throw;
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                catch (Exception exception) { ModelState.AddModelError(string.Empty, exception.Message); }
             }
             return View(ciudades);
         }
@@ -125,30 +145,15 @@ namespace TallerVehiculos.Controllers
             }
 
             var ciudades = await _context.ciudades
+                .Include(c => c.sedes)
+                .ThenInclude(u => u.usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ciudades == null)
             {
                 return NotFound();
             }
 
-            return View(ciudades);
-        }
-
-        // POST: Ciudades/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.ciudades == null)
-            {
-                return Problem("Entity set 'AplicationDbContext.ciudades'  is null.");
-            }
-            var ciudades = await _context.ciudades.FindAsync(id);
-            if (ciudades != null)
-            {
-                _context.ciudades.Remove(ciudades);
-            }
-            
+            _context.ciudades.Remove(ciudades);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -156,6 +161,119 @@ namespace TallerVehiculos.Controllers
         private bool CiudadesExists(int id)
         {
           return _context.ciudades.Any(e => e.Id == id);
+        }
+
+
+        public async Task<IActionResult> AddSede(int? id)
+        {
+            if (id == null) { 
+                return NotFound(); 
+            }
+            Ciudades ciudades = await _context.ciudades.FindAsync(id); 
+            if (ciudades == null) { 
+                return NotFound(); 
+            }
+            Sedes model = new Sedes { Id = ciudades.Id }; 
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddSede(Sedes sede)
+        {
+            if (ModelState.IsValid)
+            {
+                Ciudades ciudades = await _context.ciudades
+                                .Include(c => c.sedes)
+                                .FirstOrDefaultAsync(c => c.Id == sede.Id);
+
+                if (ciudades == null) { return NotFound(); }
+
+                try
+                {
+                    sede.Id = 0;
+                    ciudades.sedes.Add(sede);
+                    _context.Update(ciudades);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Details), new { Id = ciudades.Id });
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "There are a record with the same name.");
+                    }
+                    else { ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message); }
+                }
+                catch (Exception exception) { ModelState.AddModelError(string.Empty, exception.Message); }
+            }
+            return View(sede);
+        }
+
+        public async Task<IActionResult> EditSede(int? id)
+        {
+            if (id == null) { return NotFound(); }
+            Sedes sedes = await _context.sedes.FindAsync(id); 
+            if (sedes == null) { return NotFound(); }
+            Ciudades ciudades = await _context.ciudades
+                                .FirstOrDefaultAsync(c => c.sedes.FirstOrDefault(d => d.Id == sedes.Id) != null);
+            sedes.Id = ciudades.Id; 
+            return View(sedes);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSede(Sedes sedes)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(sedes);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Details),
+                        new { Id = sedes.Id });
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "There are a record with the same name.");
+                    }
+                    else { ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message); }
+                }
+                catch (Exception exception)
+                {
+
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+            }
+            return View(sedes);
+        }
+
+        //metodo borrado
+        public async Task<IActionResult> DeleteSede(int? id)
+        {
+            if (id == null) { return NotFound(); }
+            Sedes sedes = await _context.sedes.Include(d => d.usuario).FirstOrDefaultAsync(m => m.Id == id);
+            if (sedes == null) { return NotFound(); }
+            Ciudades ciudades = await _context.ciudades
+                                .FirstOrDefaultAsync(c => c.sedes.FirstOrDefault(d => d.Id == sedes.Id) != null);
+            _context.sedes.Remove(sedes); await _context.SaveChangesAsync(); 
+            return RedirectToAction(nameof(Details), new { Id = ciudades.Id });
+        }
+
+        public async Task<IActionResult> DetailsSede(int? id)
+        {
+            if (id == null) { return NotFound(); }
+            Sedes sedes = await _context.sedes.Include(d => d.usuario).FirstOrDefaultAsync(m => m.Id == id);
+            if (sedes == null)
+            {
+                return NotFound();
+            }
+            Ciudades ciudades = await _context.ciudades
+                                .FirstOrDefaultAsync(c => c.sedes.FirstOrDefault(d => d.Id == sedes.Id) != null);
+            sedes.Id = ciudades.Id; 
+            return View(sedes);
         }
     }
 }
