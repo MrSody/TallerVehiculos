@@ -10,6 +10,5 @@ namespace TallerVehiculos.Models
         public int cantidad { get; set; }
         public double total { get; set; }
 
-
     }
 }
