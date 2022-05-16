@@ -4,17 +4,24 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.css" />
+<link rel="stylesheet" href="~/lib/Font-Awesome/css/regular.min.css">
+<link rel="stylesheet" href="~/lib/Font-Awesome/css/solid.min.css">
+
+<h1>Ciudades</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Agregar ciudad</a>
 </p>
-<table class="table">
+
+<table class="table table-hover table-responsive table-striped" id="MyTable">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
+            <th> @Html.DisplayNameFor(model => model.SedesNumber) </th>
             <th></th>
         </tr>
     </thead>
@@ -24,12 +31,30 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Nombre)
             </td>
+            <td> @Html.DisplayFor(modelItem => item.SedesNumber) </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detalles</a>
+                <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="fa-solid fa-trash-can"></i> Eliminar</button>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="/js/deleteDialog.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable();
+
+            // Delete item
+            sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Ciudades/Delete/', false);
+        });
+    </script>
+}
