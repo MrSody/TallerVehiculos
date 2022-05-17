@@ -1,4 +1,4 @@
-﻿@model TallerVehiculos.Models.Vehiculo
+﻿@model TallerVehiculos.Models.Clientes
 
 @{ 
     ViewData["Title"] = "Details"; 
@@ -11,10 +11,10 @@
 <div> <h4>Vehiculo</h4>
 <br /> <hr /> <dl class="dl-horizontal">
 
-<dt> @Html.DisplayNameFor(model => model.placa) </dt>
-<dd> @Html.DisplayFor(model => model.placa) </dd>
-<dt> @Html.DisplayNameFor(model => model.ServiciosNumber) </dt> 
-<dd> @Html.DisplayFor(model => model.ServiciosNumber) </dd> 
+<dt> @Html.DisplayNameFor(model => model.vehiculos.FirstOrDefault().placa) </dt>
+<dd> @Html.DisplayFor(model => model.vehiculos.FirstOrDefault().placa) </dd>
+<dt> @Html.DisplayNameFor(model => model.vehiculos.FirstOrDefault().ServiciosNumber) </dt> 
+<dd> @Html.DisplayFor(model => model.vehiculos.FirstOrDefault().ServiciosNumber) </dd> 
 </dl> </div> 
 <div> <a asp-action="AddServicio" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-plus"></i> Servicio</a>
 <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-success">Back to List</a> </div> <br />
@@ -24,10 +24,10 @@
             <div class="panel-heading"> <h3 class="panel-title">servicios</h3> </div> 
             <div class="panel-body">
                 <table class="table table-hover table-responsive table-striped" id="MyTable"> 
-                    <thead> <tr> <th> @Html.DisplayNameFor(model => model.servicios.FirstOrDefault().Nombre) 
+                    <thead> <tr> <th> @Html.DisplayNameFor(model => model.vehiculos.FirstOrDefault().servicios.FirstOrDefault().Nombre) 
 
                     </th> <th></th> </tr> </thead> <tbody> 
-                        @foreach (var item in Model.servicios) 
+                        @foreach (var item in Model.vehiculos.FirstOrDefault().servicios) 
                         { <tr> <td> @Html.DisplayFor(modelItem => item.Nombre) </td> <td>
                             <a asp-action="EditVehiculo" asp-route-id="@item.Id" class="btn btn-warning">
                                 <i class="fas fa-edit"></i></a>
