@@ -11,6 +11,8 @@ namespace TallerVehiculos.Models
         [MaxLength(50, ErrorMessage = "el campo {0} debe contener almenos un caracter")]
         public string nombre { get; set; }
         public string direccion { get; set; }
+
+        public int IdCiudades { get; set; }
         public ICollection<Usuarios> usuario { get; set; }
         [DisplayName("Usuarios Number")] public int UsuariosNumber => usuario == null ? 0 : usuario.Count;
     }
