@@ -4,10 +4,23 @@
 
 namespace TallerVehiculos.Migrations
 {
-    public partial class inicial : Migration
+    public partial class TallerVehiculos : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "ciudades",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ciudades", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "clientes",
                 columns: table => new
@@ -53,58 +66,23 @@ namespace TallerVehiculos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "usuarios",
+                name: "sedes",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    edad = table.Column<int>(type: "int", nullable: false),
-                    correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    idSede = table.Column<int>(type: "int", nullable: false)
+                    direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdCiudades = table.Column<int>(type: "int", nullable: false),
+                    CiudadesId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_usuarios", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ciudades",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ClientesId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ciudades", x => x.Id);
+                    table.PrimaryKey("PK_sedes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ciudades_clientes_ClientesId",
-                        column: x => x.ClientesId,
-                        principalTable: "clientes",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "facturas",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    fecha = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    nombrePropietario = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    total = table.Column<double>(type: "float", nullable: false),
-                    ClientesId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_facturas", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_facturas_clientes_ClientesId",
-                        column: x => x.ClientesId,
-                        principalTable: "clientes",
+                        name: "FK_sedes_ciudades_CiudadesId",
+                        column: x => x.CiudadesId,
+                        principalTable: "ciudades",
                         principalColumn: "Id");
                 });
 
@@ -157,27 +135,48 @@ namespace TallerVehiculos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "sedes",
+                name: "usuarios",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    edad = table.Column<int>(type: "int", nullable: false),
+                    correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdSedes = table.Column<int>(type: "int", nullable: false),
+                    SedesId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_usuarios", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_usuarios_sedes_SedesId",
+                        column: x => x.SedesId,
+                        principalTable: "sedes",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "facturas",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    idCiudad = table.Column<int>(type: "int", nullable: false),
-                    direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CiudadesId = table.Column<int>(type: "int", nullable: true),
+                    fecha = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    total = table.Column<double>(type: "float", nullable: false),
+                    ClientesId = table.Column<int>(type: "int", nullable: true),
                     Usuariosid = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_sedes", x => x.Id);
+                    table.PrimaryKey("PK_facturas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_sedes_ciudades_CiudadesId",
-                        column: x => x.CiudadesId,
-                        principalTable: "ciudades",
+                        name: "FK_facturas_clientes_ClientesId",
+                        column: x => x.ClientesId,
+                        principalTable: "clientes",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_sedes_usuarios_Usuariosid",
+                        name: "FK_facturas_usuarios_Usuariosid",
                         column: x => x.Usuariosid,
                         principalTable: "usuarios",
                         principalColumn: "id");
@@ -189,9 +188,7 @@ namespace TallerVehiculos.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    idFactura = table.Column<int>(type: "int", maxLength: 50, nullable: false),
-                    idProducto = table.Column<int>(type: "int", nullable: false),
-                    cantidad = table.Column<int>(type: "int", nullable: false),
+                    cantidad = table.Column<int>(type: "int", maxLength: 50, nullable: false),
                     total = table.Column<double>(type: "float", nullable: false),
                     FacturaId = table.Column<int>(type: "int", nullable: true),
                     ProductosId = table.Column<int>(type: "int", nullable: true)
@@ -210,11 +207,6 @@ namespace TallerVehiculos.Migrations
                         principalTable: "productos",
                         principalColumn: "Id");
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ciudades_ClientesId",
-                table: "ciudades",
-                column: "ClientesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ciudades_Nombre",
@@ -256,6 +248,11 @@ namespace TallerVehiculos.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_facturas_Usuariosid",
+                table: "facturas",
+                column: "Usuariosid");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_productos_Nombre",
                 table: "productos",
                 column: "Nombre",
@@ -284,11 +281,6 @@ namespace TallerVehiculos.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_sedes_Usuariosid",
-                table: "sedes",
-                column: "Usuariosid");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_servicio_Nombre",
                 table: "servicio",
                 column: "Nombre",
@@ -299,6 +291,11 @@ namespace TallerVehiculos.Migrations
                 table: "usuarios",
                 column: "id",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_usuarios_SedesId",
+                table: "usuarios",
+                column: "SedesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_vehiculo_ClientesId",
@@ -323,9 +320,6 @@ namespace TallerVehiculos.Migrations
                 name: "detalleFacturas");
 
             migrationBuilder.DropTable(
-                name: "sedes");
-
-            migrationBuilder.DropTable(
                 name: "vehiculo");
 
             migrationBuilder.DropTable(
@@ -335,19 +329,22 @@ namespace TallerVehiculos.Migrations
                 name: "productos");
 
             migrationBuilder.DropTable(
-                name: "ciudades");
+                name: "servicio");
+
+            migrationBuilder.DropTable(
+                name: "clientes");
 
             migrationBuilder.DropTable(
                 name: "usuarios");
 
             migrationBuilder.DropTable(
-                name: "servicio");
-
-            migrationBuilder.DropTable(
                 name: "proveedores");
 
             migrationBuilder.DropTable(
-                name: "clientes");
+                name: "sedes");
+
+            migrationBuilder.DropTable(
+                name: "ciudades");
         }
     }
 }
