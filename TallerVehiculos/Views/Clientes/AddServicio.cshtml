@@ -1,0 +1,14 @@
+﻿@model TallerVehiculos.Models.Servicio
+@{ 
+
+    ViewData["Title"] = "Add Servicio"; 
+}
+<h2>Add</h2>
+<h4>servicio</h4> <hr /> <div class="row"> 
+    <div class="col-md-4"> <form asp-action="AddServicio"> 
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+<partial name="_Servicios" />
+<div class="form-group"> <input type="submit" value="Save" class="btn btn-primary" />
+    <a asp-action="DetailsVehiculo" asp-route-id="@Model.Id" class="btn btn-success">Back to List</a> </div> </form> </div> </div>
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }

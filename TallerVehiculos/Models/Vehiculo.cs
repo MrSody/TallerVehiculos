@@ -16,5 +16,10 @@ namespace TallerVehiculos.Models
         public string tipo { get; set; }
         public string modelo { get; set; }
 
+
+        public ICollection<Servicio> servicios { get; set; }
+        [DisplayName("Servicios Number")] public int ServiciosNumber => servicios == null ? 0 : servicios.Count;
+
+        
     }
 }
