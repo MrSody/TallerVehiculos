@@ -143,13 +143,15 @@ namespace TallerVehiculos.Controllers
         // GET: Clientes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null) { return NotFound(); }
-            Clientes vehiculos = await _context.clientes.FirstOrDefaultAsync(m => m.Id == id);
-            if (vehiculos == null)
+            if (id == null) {
+                return NotFound(); 
+            }
+            Clientes clientes = await _context.clientes.Include(c => c.vehiculos).ThenInclude(d => d.servicios).FirstOrDefaultAsync(m => m.Id == id);
+            if (clientes == null)
             {
                 return NotFound();
             }
-            _context.clientes.Remove(vehiculos); await _context.SaveChangesAsync(); 
+            _context.clientes.Remove(clientes); await _context.SaveChangesAsync(); 
             return RedirectToAction(nameof(Index));
         }
 
@@ -201,6 +203,122 @@ namespace TallerVehiculos.Controllers
             }
             return View(vehiculo);
         }
+
+
+
+
+        public async Task<IActionResult> EditVehiculo(int? id)
+        {
+            if (id == null) 
+            { 
+                return NotFound(); 
+            }
+            Vehiculo vehiculo = await _context.vehiculo.FindAsync(id); 
+            if (vehiculo == null) 
+            { 
+                return NotFound(); 
+            }
+            Clientes cliente = await _context.clientes.FirstOrDefaultAsync(c => c.vehiculos.FirstOrDefault(d => d.Id == vehiculo.Id) != null);
+            vehiculo.Id = cliente.Id; return View(vehiculo);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditVehiculo(Vehiculo vehiculo)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(vehiculo); await _context.SaveChangesAsync(); 
+                    return RedirectToAction(nameof(Details), new { Id = vehiculo.Id });
+                }
+                catch (DbUpdateException dbUpdateException) {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    { ModelState.AddModelError(string.Empty, "There are a record with the same name.");
+                    } else { ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message); } }
+                catch (Exception exception)
+                {
+                    
+                 ModelState.AddModelError(string.Empty, exception.Message);
+                }
+            }
+            return View(vehiculo);
+        }
+
+
+
+        public async Task<IActionResult> DeleteVehiculo(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            Vehiculo vehiculo = await _context.vehiculo.Include(d => d.servicios).FirstOrDefaultAsync(m => m.Id == id);
+            if (vehiculo == null)
+            {
+                return NotFound();
+            }
+            Clientes clientes = await _context.clientes.FirstOrDefaultAsync(c => c.vehiculos.FirstOrDefault(d => d.Id == vehiculo.Id) != null);
+            _context.vehiculo.Remove(vehiculo); await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), new { Id = clientes.Id });
+        }
+
+
+
+        public async Task<IActionResult> DetailsVehiculo(int? id)
+        {
+            if (id == null) { 
+                return NotFound(); 
+            }
+            Vehiculo vehiculo = await _context.vehiculo.Include(d => d.servicios).FirstOrDefaultAsync(m => m.Id == id); 
+            if (vehiculo == null) { return NotFound(); 
+            }
+            Clientes clientes = await _context.clientes.FirstOrDefaultAsync(c => c.vehiculos.FirstOrDefault(d => d.Id == vehiculo.Id) != null);
+            vehiculo.Id = clientes.Id; 
+            return View(clientes);
+        }
+
+
+
+
+        public async Task<IActionResult> AddServicio(int? id)
+        {
+            if (id == null) {
+                return NotFound();
+            }
+            Vehiculo vehiculo = await _context.vehiculo.FindAsync(id); if (vehiculo == null) { return NotFound(); }
+            Servicio model = new Servicio { Id = vehiculo.Id }; 
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> AddServicio(Servicio servicio)
+        {
+            if (ModelState.IsValid)
+            {
+                Vehiculo vehiculo = await _context.vehiculo.Include(d => d.servicios).FirstOrDefaultAsync(c => c.Id == servicio.Id);
+                if (vehiculo == null) {
+                    return NotFound();
+                }
+                try
+
+                { servicio.Id = 0;
+                    vehiculo.servicios.Add(servicio); 
+                    _context.Update(vehiculo); 
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(DetailsVehiculo), new { Id = vehiculo.Id }); 
+                } catch (DbUpdateException dbUpdateException) 
+                { if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    { ModelState.AddModelError(string.Empty, "There are a record with the same name.");
+                    } else { ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                    }
+                }
+                catch (Exception exception) { ModelState.AddModelError(string.Empty, exception.Message); }
+            }
+            return View(servicio);
+        }
+
 
 
 

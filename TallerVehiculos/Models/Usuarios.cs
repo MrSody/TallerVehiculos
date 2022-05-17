@@ -13,8 +13,6 @@ namespace TallerVehiculos.Models
         public int edad { get; set; }
         public string correo { get; set; }
 
-        public int IdSedes { get; set; }
-
         public ICollection<Factura> facturas { get; set; }
 
     }

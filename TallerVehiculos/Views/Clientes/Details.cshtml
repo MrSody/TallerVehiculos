@@ -35,8 +35,8 @@
     </dl>
 </div>
 <div>
-    <a asp-action="AddVehiculo" asp-route-id="@Model.Id" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Vehiculo</a>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="AddVehiculo" asp-route-id="@Model.Id" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i>Add Vehiculo</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit </a> |
     <a asp-action="Index">Back to List</a>
 </div>
 <br />
@@ -66,8 +66,15 @@
                                     @Html.DisplayFor(modelItem => item.placa)
                                 </td>
                                 <td>
+                                    @Html.DisplayFor(modelItem => item.tipo)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.modelo)
+                                </td>
+                                <td>
                                     <a asp-action="EditVehiculo" asp-route-id="@item.Id" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                    <a asp-action="DetailsVehiculo" asp-route-id="@item.Id" class="btn btn-info"><i class="fas fa-align-justify"i></a>
+                                    <a asp-action="DetailsVehiculo" asp-route-id="@item.Id" class="btn btn-info"><i class="fa-solid fa-circle-info"></i></a>
                                   <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="fas fa-trash"></i></button>  
                                 </td>
                             </tr>

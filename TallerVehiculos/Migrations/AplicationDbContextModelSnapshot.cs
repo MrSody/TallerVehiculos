@@ -22,6 +22,21 @@ namespace TallerVehiculos.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("ServicioVehiculo", b =>
+                {
+                    b.Property<int>("serviciosId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("vehiculosId")
+                        .HasColumnType("int");
+
+                    b.HasKey("serviciosId", "vehiculosId");
+
+                    b.HasIndex("vehiculosId");
+
+                    b.ToTable("ServicioVehiculo");
+                });
+
             modelBuilder.Entity("TallerVehiculos.Models.Ciudades", b =>
                 {
                     b.Property<int>("Id")
@@ -114,9 +129,6 @@ namespace TallerVehiculos.Migrations
                     b.Property<int?>("ClientesId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Usuariosid")
-                        .HasColumnType("int");
-
                     b.Property<string>("fecha")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -131,8 +143,6 @@ namespace TallerVehiculos.Migrations
 
                     b.HasIndex("Id")
                         .IsUnique();
-
-                    b.HasIndex("Usuariosid");
 
                     b.ToTable("facturas");
                 });
@@ -207,9 +217,6 @@ namespace TallerVehiculos.Migrations
                     b.Property<int?>("CiudadesId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdCiudades")
-                        .HasColumnType("int");
-
                     b.Property<string>("direccion")
                         .HasColumnType("nvarchar(max)");
 
@@ -260,9 +267,6 @@ namespace TallerVehiculos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<int>("IdSedes")
-                        .HasColumnType("int");
-
                     b.Property<int?>("SedesId")
                         .HasColumnType("int");
 
@@ -298,9 +302,6 @@ namespace TallerVehiculos.Migrations
                     b.Property<int?>("ClientesId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ServicioId")
-                        .HasColumnType("int");
-
                     b.Property<string>("modelo")
                         .HasColumnType("nvarchar(max)");
 
@@ -316,12 +317,25 @@ namespace TallerVehiculos.Migrations
 
                     b.HasIndex("ClientesId");
 
-                    b.HasIndex("ServicioId");
-
                     b.HasIndex("placa")
                         .IsUnique();
 
                     b.ToTable("vehiculo");
+                });
+
+            modelBuilder.Entity("ServicioVehiculo", b =>
+                {
+                    b.HasOne("TallerVehiculos.Models.Servicio", null)
+                        .WithMany()
+                        .HasForeignKey("serviciosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TallerVehiculos.Models.Vehiculo", null)
+                        .WithMany()
+                        .HasForeignKey("vehiculosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.DetalleFactura", b =>
@@ -340,10 +354,6 @@ namespace TallerVehiculos.Migrations
                     b.HasOne("TallerVehiculos.Models.Clientes", null)
                         .WithMany("facturas")
                         .HasForeignKey("ClientesId");
-
-                    b.HasOne("TallerVehiculos.Models.Usuarios", null)
-                        .WithMany("facturas")
-                        .HasForeignKey("Usuariosid");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Productos", b =>
@@ -372,10 +382,6 @@ namespace TallerVehiculos.Migrations
                     b.HasOne("TallerVehiculos.Models.Clientes", null)
                         .WithMany("vehiculos")
                         .HasForeignKey("ClientesId");
-
-                    b.HasOne("TallerVehiculos.Models.Servicio", null)
-                        .WithMany("vehiculos")
-                        .HasForeignKey("ServicioId");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Ciudades", b =>
@@ -408,16 +414,6 @@ namespace TallerVehiculos.Migrations
             modelBuilder.Entity("TallerVehiculos.Models.Sedes", b =>
                 {
                     b.Navigation("usuario");
-                });
-
-            modelBuilder.Entity("TallerVehiculos.Models.Servicio", b =>
-                {
-                    b.Navigation("vehiculos");
-                });
-
-            modelBuilder.Entity("TallerVehiculos.Models.Usuarios", b =>
-                {
-                    b.Navigation("facturas");
                 });
 #pragma warning restore 612, 618
         }
