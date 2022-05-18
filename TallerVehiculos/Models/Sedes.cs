@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TallerVehiculos.Models
 {
@@ -13,7 +15,11 @@ namespace TallerVehiculos.Models
         public string direccion { get; set; }
 
         public int IdCiudades { get; set; }
+
+        [JsonIgnore] //lo ignora en la respuesta json
+        [NotMapped] //no se crea en la base de datos
         public ICollection<Usuarios> usuario { get; set; }
         [DisplayName("Usuarios Number")] public int UsuariosNumber => usuario == null ? 0 : usuario.Count;
+
     }
 }
