@@ -1,0 +1,15 @@
+﻿
+@model TallerVehiculos.Models.Vehiculo
+
+<h2>Add</h2>
+<h4>DetalleFactura</h4> <hr /> 
+<div class="row"> 
+    <div class="col-md-4">
+        <form asp-action="AddDetalleFactura">
+            <div asp-validation-summary="ModelOnly" class="text-danger">
+
+            </div> <input type="hidden" asp-for="Id" />
+<partial name="_DetalleFactura" />
+<div class="form-group"> 
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-success">Back to List</a> </div> </form> </div> </div>
+@section Scripts { @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} }

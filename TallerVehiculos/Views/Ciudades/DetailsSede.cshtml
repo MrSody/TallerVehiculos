@@ -1,0 +1,81 @@
+﻿@model TallerVehiculos.Models.Sedes
+
+@{ 
+    ViewData["Title"] = "Details"; 
+}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.css" />
+<link rel="stylesheet" href="~/lib/Font-Awesome/css/regular.min.css">
+<link rel="stylesheet" href="~/lib/Font-Awesome/css/solid.min.css">
+
+<h2>Details</h2>
+<div> 
+    <h4>Sede</h4>
+    <br /> <hr /> 
+    
+    <dl class="dl-horizontal">
+
+        <dt> @Html.DisplayNameFor(model => model.nombre) </dt> 
+        <dd> @Html.DisplayFor(model => model.nombre) </dd> 
+        <dt> @Html.DisplayNameFor(model => model.direccion) </dt> 
+        <dd> @Html.DisplayFor(model => model.direccion) </dd> 
+        <dt> @Html.DisplayNameFor(model => model.UsuariosNumber) 
+        </dt> <dd> @Html.DisplayFor(model => model.UsuariosNumber) </dd>
+
+    </dl>
+</div> 
+<div> 
+    <a asp-action="AddUsuario" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-plus"></i> Usuario</a>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-success">Back to List</a> </div> <br />
+<div class="row"> 
+    <div class="col-md-12"> 
+        <div class="panel panel-default"> 
+            <div class="panel-heading">
+                <h3 class="panel-title">Alumnos</h3>
+            </div> 
+            <div class="panel-body"> 
+                <table class="table table-hover table-responsive table-striped" id="MyTable">
+                    <thead> 
+                        <tr>
+                            <th> @Html.DisplayNameFor(model => model.usuario.FirstOrDefault().nombre)</th> 
+                            <th> @Html.DisplayNameFor(model => model.usuario.FirstOrDefault().edad)</th> 
+                            <th> @Html.DisplayNameFor(model => model.usuario.FirstOrDefault().correo)</th>
+                            <th></th>
+                        </tr>
+                    </thead> 
+                    <tbody> 
+                        @foreach (var item in Model.usuario) { 
+
+                         <tr> 
+                            <td> @Html.DisplayFor(modelItem => item.nombre) </td> 
+                            <td> @Html.DisplayFor(modelItem => item.edad) </td>
+                            <td> @Html.DisplayFor(modelItem => item.correo) </td>
+                            <td>
+                                <a asp-action="EditUsuario" asp-route-id="@item.id" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                <button data-id="@item.id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="fas fa-trash"></i></button> 
+                            </td> 
+                        </tr>
+                        } 
+                    </tbody>
+                </table>
+            </div>
+        </div> 
+    </div> 
+</div>
+
+<partial name="_DeleteDialog" />
+
+@section Scripts { 
+    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");} 
+
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="/js/deleteDialog.js"></script>
+    <script type="text/javascript"> 
+    $(document).ready(function () { 
+        $('#MyTable').DataTable();
+        sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Alumnos/Delete/', false); 
+    }); 
+    </script> 
+}

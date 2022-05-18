@@ -275,5 +275,122 @@ namespace TallerVehiculos.Controllers
             sedes.Id = ciudades.Id; 
             return View(sedes);
         }
+
+        // USUARIO
+        public async Task<IActionResult> AddUsuario(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            Sedes sedes = await _context.sedes.FindAsync(id);
+            if (sedes == null)
+            {
+                return NotFound();
+            }
+            Sedes model = new Sedes { Id = sedes.Id };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddUsuario(Usuarios usuarios)
+        {
+            if (ModelState.IsValid)
+            {
+                Sedes sedes = await _context.sedes
+                                .Include(c => c.usuario)
+                                .FirstOrDefaultAsync(c => c.Id == usuarios.id);
+
+                if (sedes == null) { return NotFound(); }
+
+                try
+                {
+                    usuarios.id = 0;
+                    sedes.usuario.Add(usuarios);
+                    _context.Update(sedes);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Details), new { Id = sedes.Id });
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "There are a record with the same name.");
+                    }
+                    else { ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message); }
+                }
+                catch (Exception exception) { ModelState.AddModelError(string.Empty, exception.Message); }
+            }
+            return View(usuarios);
+        }
+
+        public async Task<IActionResult> EditUsuario(int? id)
+        {
+            if (id == null) { return NotFound(); }
+            Usuarios usuarios = await _context.usuarios.FindAsync(id);
+            if (usuarios == null) { return NotFound(); }
+            Sedes sedes = await _context.sedes
+                                .FirstOrDefaultAsync(c => c.usuario.FirstOrDefault(d => d.id == usuarios.id) != null);
+            usuarios.id = sedes.Id;
+            return View(usuarios);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUsuario(Usuarios usuarios)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(usuarios);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Details),
+                        new { Id = usuarios.id });
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "There are a record with the same name.");
+                    }
+                    else { ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message); }
+                }
+                catch (Exception exception)
+                {
+
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
+            }
+            return View(usuarios);
+        }
+
+        //metodo borrado
+        public async Task<IActionResult> DeleteUsuario(int? id)
+        {
+            if (id == null) { return NotFound(); }
+            Usuarios usuario = await _context.usuarios.FirstOrDefaultAsync(m => m.id == id);
+            if (usuario == null) { return NotFound(); }
+            Sedes sedes = await _context.sedes
+                                .FirstOrDefaultAsync(c => c.usuario.FirstOrDefault(d => d.id == usuario.id) != null);
+            // ERROR
+            //_context.sedes.Remove(usuario); 
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Details), new { Id = sedes.Id });
+        }
+
+        public async Task<IActionResult> DetailsUsuario(int? id)
+        {
+            if (id == null) { return NotFound(); }
+            Usuarios usuarios = await _context.usuarios.FirstOrDefaultAsync(m => m.id == id);
+            if (usuarios == null)
+            {
+                return NotFound();
+            }
+            Sedes sedes = await _context.sedes
+                                .FirstOrDefaultAsync(c => c.usuario.FirstOrDefault(d => d.id == usuarios.id) != null);
+            usuarios.id = sedes.Id;
+            return View(usuarios);
+        }
     }
 }

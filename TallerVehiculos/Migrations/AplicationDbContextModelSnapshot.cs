@@ -265,9 +265,6 @@ namespace TallerVehiculos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-                    b.Property<int?>("SedesId")
-                        .HasColumnType("int");
-
                     b.Property<string>("correo")
                         .HasColumnType("nvarchar(max)");
 
@@ -280,8 +277,6 @@ namespace TallerVehiculos.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("id");
-
-                    b.HasIndex("SedesId");
 
                     b.HasIndex("id")
                         .IsUnique();
@@ -364,13 +359,6 @@ namespace TallerVehiculos.Migrations
                         .HasForeignKey("VehiculoId");
                 });
 
-            modelBuilder.Entity("TallerVehiculos.Models.Usuarios", b =>
-                {
-                    b.HasOne("TallerVehiculos.Models.Sedes", null)
-                        .WithMany("usuario")
-                        .HasForeignKey("SedesId");
-                });
-
             modelBuilder.Entity("TallerVehiculos.Models.Vehiculo", b =>
                 {
                     b.HasOne("TallerVehiculos.Models.Clientes", null)
@@ -403,11 +391,6 @@ namespace TallerVehiculos.Migrations
             modelBuilder.Entity("TallerVehiculos.Models.Proveedor", b =>
                 {
                     b.Navigation("productos");
-                });
-
-            modelBuilder.Entity("TallerVehiculos.Models.Sedes", b =>
-                {
-                    b.Navigation("usuario");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Usuarios", b =>
