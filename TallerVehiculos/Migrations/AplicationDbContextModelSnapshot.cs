@@ -129,6 +129,9 @@ namespace TallerVehiculos.Migrations
                     b.Property<int?>("ClientesId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Usuariosid")
+                        .HasColumnType("int");
+
                     b.Property<string>("fecha")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -143,6 +146,8 @@ namespace TallerVehiculos.Migrations
 
                     b.HasIndex("Id")
                         .IsUnique();
+
+                    b.HasIndex("Usuariosid");
 
                     b.ToTable("facturas");
                 });
@@ -215,6 +220,9 @@ namespace TallerVehiculos.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("CiudadesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdCiudades")
                         .HasColumnType("int");
 
                     b.Property<string>("direccion")
@@ -354,6 +362,10 @@ namespace TallerVehiculos.Migrations
                     b.HasOne("TallerVehiculos.Models.Clientes", null)
                         .WithMany("facturas")
                         .HasForeignKey("ClientesId");
+
+                    b.HasOne("TallerVehiculos.Models.Usuarios", null)
+                        .WithMany("facturas")
+                        .HasForeignKey("Usuariosid");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Productos", b =>
@@ -414,6 +426,11 @@ namespace TallerVehiculos.Migrations
             modelBuilder.Entity("TallerVehiculos.Models.Sedes", b =>
                 {
                     b.Navigation("usuario");
+                });
+
+            modelBuilder.Entity("TallerVehiculos.Models.Usuarios", b =>
+                {
+                    b.Navigation("facturas");
                 });
 #pragma warning restore 612, 618
         }

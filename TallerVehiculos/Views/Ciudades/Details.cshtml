@@ -34,7 +34,7 @@
     <div class="col-md-12"> 
         <div class="panel panel-default"> 
             <div class="panel-heading"> 
-                <h3 class="panel-title">Barrios</h3> 
+                <h3 class="panel-title">Sedes</h3> 
             </div> 
             <div class="panel-body"> 
                 <table class="table table-hover table-responsive table-striped" id="MyTable"> 
@@ -51,10 +51,10 @@
                                 <td> @Html.DisplayFor(modelItem => item.nombre) </td> 
                                 <td> @Html.DisplayFor(modelItem => item.direccion) </td> 
                                 <td> 
-                                    <a asp-action="EditBarrio" asp-route-id="@item.Id" class="btn btn-warning">
+                                    <a asp-action="EditSede" asp-route-id="@item.Id" class="btn btn-warning">
                                         <i class="fas fa-edit"></i>
                                     </a> 
-                                    <a asp-action="DetailsBarrio" asp-route-id="@item.Id" class="btn btn-info"><i class="fas fa-align-justify"></i></a>
+                                    <a asp-action="DetailsSede" asp-route-id="@item.Id" class="btn btn-info"><i class="fas fa-align-justify"></i></a>
                                     <button data-id="@item.Id" class="btn btn-danger deleteItem" data-toggle="modal" data-target="#deleteDialog"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>

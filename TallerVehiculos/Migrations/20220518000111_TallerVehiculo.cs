@@ -4,11 +4,7 @@
 
 namespace TallerVehiculos.Migrations
 {
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.cs
-    public partial class TallerVehiculos : Migration
-========
-    public partial class tallervehiculo2 : Migration
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.cs
+    public partial class TallerVehiculo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -77,10 +73,7 @@ namespace TallerVehiculos.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.cs
                     IdCiudades = table.Column<int>(type: "int", nullable: false),
-========
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.cs
                     CiudadesId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -90,29 +83,6 @@ namespace TallerVehiculos.Migrations
                         name: "FK_sedes_ciudades_CiudadesId",
                         column: x => x.CiudadesId,
                         principalTable: "ciudades",
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.cs
-========
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "facturas",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    fecha = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    total = table.Column<double>(type: "float", nullable: false),
-                    ClientesId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_facturas", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_facturas_clientes_ClientesId",
-                        column: x => x.ClientesId,
-                        principalTable: "clientes",
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.cs
                         principalColumn: "Id");
                 });
 
@@ -180,26 +150,27 @@ namespace TallerVehiculos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.cs
-                name: "usuarios",
+                name: "ServicioVehiculo",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    edad = table.Column<int>(type: "int", nullable: false),
-                    correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IdSedes = table.Column<int>(type: "int", nullable: false),
-                    SedesId = table.Column<int>(type: "int", nullable: true)
+                    serviciosId = table.Column<int>(type: "int", nullable: false),
+                    vehiculosId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_usuarios", x => x.id);
+                    table.PrimaryKey("PK_ServicioVehiculo", x => new { x.serviciosId, x.vehiculosId });
                     table.ForeignKey(
-                        name: "FK_usuarios_sedes_SedesId",
-                        column: x => x.SedesId,
-                        principalTable: "sedes",
-                        principalColumn: "Id");
+                        name: "FK_ServicioVehiculo_servicio_serviciosId",
+                        column: x => x.serviciosId,
+                        principalTable: "servicio",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ServicioVehiculo_vehiculo_vehiculosId",
+                        column: x => x.vehiculosId,
+                        principalTable: "vehiculo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,29 +197,6 @@ namespace TallerVehiculos.Migrations
                         column: x => x.Usuariosid,
                         principalTable: "usuarios",
                         principalColumn: "id");
-========
-                name: "ServicioVehiculo",
-                columns: table => new
-                {
-                    serviciosId = table.Column<int>(type: "int", nullable: false),
-                    vehiculosId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ServicioVehiculo", x => new { x.serviciosId, x.vehiculosId });
-                    table.ForeignKey(
-                        name: "FK_ServicioVehiculo_servicio_serviciosId",
-                        column: x => x.serviciosId,
-                        principalTable: "servicio",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ServicioVehiculo_vehiculo_vehiculosId",
-                        column: x => x.vehiculosId,
-                        principalTable: "vehiculo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.cs
                 });
 
             migrationBuilder.CreateTable(
@@ -389,14 +337,7 @@ namespace TallerVehiculos.Migrations
                 name: "detalleFacturas");
 
             migrationBuilder.DropTable(
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.cs
-                name: "vehiculo");
-========
                 name: "ServicioVehiculo");
-
-            migrationBuilder.DropTable(
-                name: "usuarios");
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.cs
 
             migrationBuilder.DropTable(
                 name: "facturas");
@@ -408,27 +349,19 @@ namespace TallerVehiculos.Migrations
                 name: "servicio");
 
             migrationBuilder.DropTable(
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.cs
-                name: "clientes");
-
-            migrationBuilder.DropTable(
-                name: "usuarios");
-========
                 name: "vehiculo");
 
             migrationBuilder.DropTable(
-                name: "sedes");
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.cs
+                name: "usuarios");
 
             migrationBuilder.DropTable(
                 name: "proveedores");
 
             migrationBuilder.DropTable(
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.cs
-                name: "sedes");
-========
                 name: "clientes");
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.cs
+
+            migrationBuilder.DropTable(
+                name: "sedes");
 
             migrationBuilder.DropTable(
                 name: "ciudades");

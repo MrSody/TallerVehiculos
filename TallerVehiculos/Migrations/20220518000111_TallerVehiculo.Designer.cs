@@ -12,13 +12,8 @@ using TallerVehiculos.Data;
 namespace TallerVehiculos.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.Designer.cs
-    [Migration("20220517024259_TallerVehiculos")]
-    partial class TallerVehiculos
-========
-    [Migration("20220517025801_tallervehiculo2")]
-    partial class tallervehiculo2
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.Designer.cs
+    [Migration("20220518000111_TallerVehiculo")]
+    partial class TallerVehiculo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -229,12 +224,9 @@ namespace TallerVehiculos.Migrations
                     b.Property<int?>("CiudadesId")
                         .HasColumnType("int");
 
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.Designer.cs
                     b.Property<int>("IdCiudades")
                         .HasColumnType("int");
 
-========
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.Designer.cs
                     b.Property<string>("direccion")
                         .HasColumnType("nvarchar(max)");
 
@@ -285,12 +277,6 @@ namespace TallerVehiculos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.Designer.cs
-                    b.Property<int>("IdSedes")
-                        .HasColumnType("int");
-
-========
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.Designer.cs
                     b.Property<int?>("SedesId")
                         .HasColumnType("int");
 
@@ -347,8 +333,6 @@ namespace TallerVehiculos.Migrations
                     b.ToTable("vehiculo");
                 });
 
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.Designer.cs
-========
             modelBuilder.Entity("ServicioVehiculo", b =>
                 {
                     b.HasOne("TallerVehiculos.Models.Servicio", null)
@@ -364,7 +348,6 @@ namespace TallerVehiculos.Migrations
                         .IsRequired();
                 });
 
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.Designer.cs
             modelBuilder.Entity("TallerVehiculos.Models.DetalleFactura", b =>
                 {
                     b.HasOne("TallerVehiculos.Models.Factura", null)
@@ -443,23 +426,13 @@ namespace TallerVehiculos.Migrations
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Sedes", b =>
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.Designer.cs
                 {
                     b.Navigation("usuario");
-                });
-
-            modelBuilder.Entity("TallerVehiculos.Models.Servicio", b =>
-                {
-                    b.Navigation("vehiculos");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Usuarios", b =>
                 {
                     b.Navigation("facturas");
-========
-                {
-                    b.Navigation("usuario");
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.Designer.cs
                 });
 #pragma warning restore 612, 618
         }
