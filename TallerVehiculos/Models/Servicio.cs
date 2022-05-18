@@ -11,7 +11,7 @@ namespace TallerVehiculos.Models
         public string Nombre { get; set; }
         public double precio { get; set; }
 
-        public ICollection<Vehiculo> vehiculos { get; set; }
+    
 
 
     }

@@ -12,13 +12,8 @@ using TallerVehiculos.Data;
 namespace TallerVehiculos.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.Designer.cs
-    [Migration("20220517024259_TallerVehiculos")]
-    partial class TallerVehiculos
-========
-    [Migration("20220517025801_tallervehiculo2")]
-    partial class tallervehiculo2
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.Designer.cs
+    [Migration("20220518030327_tallervehiculo")]
+    partial class tallervehiculo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,21 +23,6 @@ namespace TallerVehiculos.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("ServicioVehiculo", b =>
-                {
-                    b.Property<int>("serviciosId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("vehiculosId")
-                        .HasColumnType("int");
-
-                    b.HasKey("serviciosId", "vehiculosId");
-
-                    b.HasIndex("vehiculosId");
-
-                    b.ToTable("ServicioVehiculo");
-                });
 
             modelBuilder.Entity("TallerVehiculos.Models.Ciudades", b =>
                 {
@@ -229,12 +209,9 @@ namespace TallerVehiculos.Migrations
                     b.Property<int?>("CiudadesId")
                         .HasColumnType("int");
 
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.Designer.cs
                     b.Property<int>("IdCiudades")
                         .HasColumnType("int");
 
-========
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.Designer.cs
                     b.Property<string>("direccion")
                         .HasColumnType("nvarchar(max)");
 
@@ -266,6 +243,9 @@ namespace TallerVehiculos.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int?>("VehiculoId")
+                        .HasColumnType("int");
+
                     b.Property<double>("precio")
                         .HasColumnType("float");
 
@@ -273,6 +253,8 @@ namespace TallerVehiculos.Migrations
 
                     b.HasIndex("Nombre")
                         .IsUnique();
+
+                    b.HasIndex("VehiculoId");
 
                     b.ToTable("servicio");
                 });
@@ -285,12 +267,6 @@ namespace TallerVehiculos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.Designer.cs
-                    b.Property<int>("IdSedes")
-                        .HasColumnType("int");
-
-========
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.Designer.cs
                     b.Property<int?>("SedesId")
                         .HasColumnType("int");
 
@@ -347,24 +323,6 @@ namespace TallerVehiculos.Migrations
                     b.ToTable("vehiculo");
                 });
 
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.Designer.cs
-========
-            modelBuilder.Entity("ServicioVehiculo", b =>
-                {
-                    b.HasOne("TallerVehiculos.Models.Servicio", null)
-                        .WithMany()
-                        .HasForeignKey("serviciosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TallerVehiculos.Models.Vehiculo", null)
-                        .WithMany()
-                        .HasForeignKey("vehiculosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.Designer.cs
             modelBuilder.Entity("TallerVehiculos.Models.DetalleFactura", b =>
                 {
                     b.HasOne("TallerVehiculos.Models.Factura", null)
@@ -399,6 +357,13 @@ namespace TallerVehiculos.Migrations
                     b.HasOne("TallerVehiculos.Models.Ciudades", null)
                         .WithMany("sedes")
                         .HasForeignKey("CiudadesId");
+                });
+
+            modelBuilder.Entity("TallerVehiculos.Models.Servicio", b =>
+                {
+                    b.HasOne("TallerVehiculos.Models.Vehiculo", null)
+                        .WithMany("servicios")
+                        .HasForeignKey("VehiculoId");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Usuarios", b =>
@@ -443,23 +408,18 @@ namespace TallerVehiculos.Migrations
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Sedes", b =>
-<<<<<<<< HEAD:TallerVehiculos/Migrations/20220517024259_TallerVehiculos.Designer.cs
                 {
                     b.Navigation("usuario");
-                });
-
-            modelBuilder.Entity("TallerVehiculos.Models.Servicio", b =>
-                {
-                    b.Navigation("vehiculos");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Usuarios", b =>
                 {
                     b.Navigation("facturas");
-========
+                });
+
+            modelBuilder.Entity("TallerVehiculos.Models.Vehiculo", b =>
                 {
-                    b.Navigation("usuario");
->>>>>>>> 3fd96f5dcae90a6b2821bc0d7f0b2c1eaa9c2f34:TallerVehiculos/Migrations/20220517025801_tallervehiculo2.Designer.cs
+                    b.Navigation("servicios");
                 });
 #pragma warning restore 612, 618
         }
