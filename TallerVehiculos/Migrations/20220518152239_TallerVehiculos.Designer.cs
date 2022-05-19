@@ -12,8 +12,8 @@ using TallerVehiculos.Data;
 namespace TallerVehiculos.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    [Migration("20220518052911_tallervehiculo")]
-    partial class tallervehiculo
+    [Migration("20220518152239_TallerVehiculos")]
+    partial class TallerVehiculos
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
