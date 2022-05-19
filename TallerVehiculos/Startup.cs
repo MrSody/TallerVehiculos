@@ -29,6 +29,9 @@ namespace TallerVehiculos
             services.AddDbContext<AplicationDbContext>(cfg => {
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddTransient<SeedDb>();
+
             services.AddControllersWithViews();
         }
 

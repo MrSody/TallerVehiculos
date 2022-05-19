@@ -28,6 +28,21 @@ public class SeedDb
                     {
                         nombre = "Reparacion autos",
                         direccion = "calle 49",
+                        usuarios = new List<Usuarios>
+                        {
+                            new Usuarios
+                            {
+                                nombre = "cristian",
+                                edad = 27,
+                                correo = "cristian@prueba.com",
+                            },
+                            new Usuarios
+                            {
+                                nombre = "brandon",
+                                edad = 22,
+                                correo = "brandon@prueba.com",
+                            },
+                        }
                     },
                      new Sedes
                      {

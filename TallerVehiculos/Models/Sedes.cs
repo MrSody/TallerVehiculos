@@ -16,10 +16,7 @@ namespace TallerVehiculos.Models
 
         public int IdCiudades { get; set; }
 
-        [JsonIgnore] //lo ignora en la respuesta json
-        [NotMapped] //no se crea en la base de datos
-        public ICollection<Usuarios> usuario { get; set; }
-        [DisplayName("Usuarios Number")] public int UsuariosNumber => usuario == null ? 0 : usuario.Count;
-
+        public ICollection<Usuarios> usuarios { get; set; }
+        [DisplayName("Usuarios Number")] public int UsuariosNumber => usuarios == null ? 0 : usuarios.Count;
     }
 }

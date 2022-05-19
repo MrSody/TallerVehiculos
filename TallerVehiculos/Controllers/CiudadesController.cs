@@ -35,8 +35,8 @@ namespace TallerVehiculos.Controllers
 
             var ciudades = await _context.ciudades
                 .Include(c => c.sedes)
-                .ThenInclude(d => d.usuario)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (ciudades == null)
             {
                 return NotFound();
@@ -146,7 +146,7 @@ namespace TallerVehiculos.Controllers
 
             var ciudades = await _context.ciudades
                 .Include(c => c.sedes)
-                .ThenInclude(u => u.usuario)
+                .ThenInclude(u => u.usuarios)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (ciudades == null)
             {
@@ -254,7 +254,7 @@ namespace TallerVehiculos.Controllers
         public async Task<IActionResult> DeleteSede(int? id)
         {
             if (id == null) { return NotFound(); }
-            Sedes sedes = await _context.sedes.Include(d => d.usuario).FirstOrDefaultAsync(m => m.Id == id);
+            Sedes sedes = await _context.sedes.Include(d => d.usuarios).FirstOrDefaultAsync(m => m.Id == id);
             if (sedes == null) { return NotFound(); }
             Ciudades ciudades = await _context.ciudades
                                 .FirstOrDefaultAsync(c => c.sedes.FirstOrDefault(d => d.Id == sedes.Id) != null);
@@ -265,13 +265,14 @@ namespace TallerVehiculos.Controllers
         public async Task<IActionResult> DetailsSede(int? id)
         {
             if (id == null) { return NotFound(); }
-            Sedes sedes = await _context.sedes.Include(d => d.usuario).FirstOrDefaultAsync(m => m.Id == id);
+            Sedes sedes = await _context.sedes.Include(c => c.usuarios).FirstOrDefaultAsync(m => m.Id == id);
             if (sedes == null)
             {
                 return NotFound();
             }
-            Ciudades ciudades = await _context.ciudades
-                                .FirstOrDefaultAsync(c => c.sedes.FirstOrDefault(d => d.Id == sedes.Id) != null);
+
+            Ciudades ciudades = await _context.ciudades.FirstOrDefaultAsync(c => c.sedes.FirstOrDefault(d => d.Id == sedes.Id) != null);
+
             sedes.Id = ciudades.Id; 
             return View(sedes);
         }
@@ -288,7 +289,7 @@ namespace TallerVehiculos.Controllers
             {
                 return NotFound();
             }
-            Sedes model = new Sedes { Id = sedes.Id };
+            Usuarios model = new Usuarios { id = sedes.Id };
             return View(model);
         }
 
@@ -299,7 +300,7 @@ namespace TallerVehiculos.Controllers
             if (ModelState.IsValid)
             {
                 Sedes sedes = await _context.sedes
-                                .Include(c => c.usuario)
+                                .Include(c => c.usuarios)
                                 .FirstOrDefaultAsync(c => c.Id == usuarios.id);
 
                 if (sedes == null) { return NotFound(); }
@@ -307,7 +308,7 @@ namespace TallerVehiculos.Controllers
                 try
                 {
                     usuarios.id = 0;
-                    sedes.usuario.Add(usuarios);
+                    sedes.usuarios.Add(usuarios);
                     _context.Update(sedes);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Details), new { Id = sedes.Id });
@@ -331,7 +332,7 @@ namespace TallerVehiculos.Controllers
             Usuarios usuarios = await _context.usuarios.FindAsync(id);
             if (usuarios == null) { return NotFound(); }
             Sedes sedes = await _context.sedes
-                                .FirstOrDefaultAsync(c => c.usuario.FirstOrDefault(d => d.id == usuarios.id) != null);
+                                .FirstOrDefaultAsync(c => c.usuarios.FirstOrDefault(d => d.id == usuarios.id) != null);
             usuarios.id = sedes.Id;
             return View(usuarios);
         }
@@ -372,7 +373,7 @@ namespace TallerVehiculos.Controllers
             Usuarios usuario = await _context.usuarios.FirstOrDefaultAsync(m => m.id == id);
             if (usuario == null) { return NotFound(); }
             Sedes sedes = await _context.sedes
-                                .FirstOrDefaultAsync(c => c.usuario.FirstOrDefault(d => d.id == usuario.id) != null);
+                                .FirstOrDefaultAsync(c => c.usuarios.FirstOrDefault(d => d.id == usuario.id) != null);
             // ERROR
             //_context.sedes.Remove(usuario); 
             await _context.SaveChangesAsync();
@@ -388,7 +389,7 @@ namespace TallerVehiculos.Controllers
                 return NotFound();
             }
             Sedes sedes = await _context.sedes
-                                .FirstOrDefaultAsync(c => c.usuario.FirstOrDefault(d => d.id == usuarios.id) != null);
+                                .FirstOrDefaultAsync(c => c.usuarios.FirstOrDefault(d => d.id == usuarios.id) != null);
             usuarios.id = sedes.Id;
             return View(usuarios);
         }
