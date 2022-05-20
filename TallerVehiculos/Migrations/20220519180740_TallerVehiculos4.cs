@@ -1,13 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace TallerVehiculos.Migrations
 {
-    public partial class TallerVehiculos : Migration
+    public partial class TallerVehiculos4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "ciudades",
                 columns: table => new
@@ -49,21 +64,6 @@ namespace TallerVehiculos.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_proveedores", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "usuarios",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    edad = table.Column<int>(type: "int", nullable: false),
-                    correo = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_usuarios", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -115,17 +115,85 @@ namespace TallerVehiculos.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    precio = table.Column<int>(type: "int", nullable: false),
-                    cantidad = table.Column<int>(type: "int", nullable: false),
+                    descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    precio = table.Column<double>(type: "float", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsStarred = table.Column<bool>(type: "bit", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: true),
                     ProveedorId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_productos", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_productos_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_productos_proveedores_ProveedorId",
                         column: x => x.ProveedorId,
                         principalTable: "proveedores",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "usuarios",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    edad = table.Column<int>(type: "int", nullable: false),
+                    correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SedesId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_usuarios", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_usuarios_sedes_SedesId",
+                        column: x => x.SedesId,
+                        principalTable: "sedes",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "servicio",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    precio = table.Column<double>(type: "float", nullable: false),
+                    VehiculoId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_servicio", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_servicio_vehiculo_VehiculoId",
+                        column: x => x.VehiculoId,
+                        principalTable: "vehiculo",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductImages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductosId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductImages_productos_ProductosId",
+                        column: x => x.ProductosId,
+                        principalTable: "productos",
                         principalColumn: "Id");
                 });
 
@@ -156,26 +224,6 @@ namespace TallerVehiculos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "servicio",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    precio = table.Column<double>(type: "float", nullable: false),
-                    VehiculoId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_servicio", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_servicio_vehiculo_VehiculoId",
-                        column: x => x.VehiculoId,
-                        principalTable: "vehiculo",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "detalleFacturas",
                 columns: table => new
                 {
@@ -200,6 +248,12 @@ namespace TallerVehiculos.Migrations
                         principalTable: "productos",
                         principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Categories_Name",
+                table: "Categories",
+                column: "Name",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ciudades_Nombre",
@@ -244,6 +298,16 @@ namespace TallerVehiculos.Migrations
                 name: "IX_facturas_Usuariosid",
                 table: "facturas",
                 column: "Usuariosid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductImages_ProductosId",
+                table: "ProductImages",
+                column: "ProductosId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_productos_CategoryId",
+                table: "productos",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_productos_Nombre",
@@ -291,6 +355,11 @@ namespace TallerVehiculos.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_usuarios_SedesId",
+                table: "usuarios",
+                column: "SedesId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_vehiculo_ClientesId",
                 table: "vehiculo",
                 column: "ClientesId");
@@ -308,7 +377,7 @@ namespace TallerVehiculos.Migrations
                 name: "detalleFacturas");
 
             migrationBuilder.DropTable(
-                name: "sedes");
+                name: "ProductImages");
 
             migrationBuilder.DropTable(
                 name: "servicio");
@@ -320,19 +389,25 @@ namespace TallerVehiculos.Migrations
                 name: "productos");
 
             migrationBuilder.DropTable(
-                name: "ciudades");
-
-            migrationBuilder.DropTable(
                 name: "vehiculo");
 
             migrationBuilder.DropTable(
                 name: "usuarios");
 
             migrationBuilder.DropTable(
+                name: "Categories");
+
+            migrationBuilder.DropTable(
                 name: "proveedores");
 
             migrationBuilder.DropTable(
                 name: "clientes");
+
+            migrationBuilder.DropTable(
+                name: "sedes");
+
+            migrationBuilder.DropTable(
+                name: "ciudades");
         }
     }
 }

@@ -12,8 +12,8 @@ using TallerVehiculos.Data;
 namespace TallerVehiculos.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    [Migration("20220518152239_TallerVehiculos")]
-    partial class TallerVehiculos
+    [Migration("20220519180740_TallerVehiculos4")]
+    partial class TallerVehiculos4
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,30 @@ namespace TallerVehiculos.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("TallerVehiculos.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Categories");
+                });
 
             modelBuilder.Entity("TallerVehiculos.Models.Ciudades", b =>
                 {
@@ -139,6 +163,27 @@ namespace TallerVehiculos.Migrations
                     b.ToTable("facturas");
                 });
 
+            modelBuilder.Entity("TallerVehiculos.Models.ProductImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("ProductosId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductosId");
+
+                    b.ToTable("ProductImages");
+                });
+
             modelBuilder.Entity("TallerVehiculos.Models.Productos", b =>
                 {
                     b.Property<int>("Id")
@@ -146,6 +191,15 @@ namespace TallerVehiculos.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsStarred")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -155,13 +209,15 @@ namespace TallerVehiculos.Migrations
                     b.Property<int?>("ProveedorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("cantidad")
-                        .HasColumnType("int");
+                    b.Property<string>("descripcion")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("precio")
-                        .HasColumnType("int");
+                    b.Property<double>("precio")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("Nombre")
                         .IsUnique();
@@ -267,6 +323,9 @@ namespace TallerVehiculos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
 
+                    b.Property<int?>("SedesId")
+                        .HasColumnType("int");
+
                     b.Property<string>("correo")
                         .HasColumnType("nvarchar(max)");
 
@@ -279,6 +338,8 @@ namespace TallerVehiculos.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("id");
+
+                    b.HasIndex("SedesId");
 
                     b.HasIndex("id")
                         .IsUnique();
@@ -340,11 +401,24 @@ namespace TallerVehiculos.Migrations
                         .HasForeignKey("Usuariosid");
                 });
 
+            modelBuilder.Entity("TallerVehiculos.Models.ProductImage", b =>
+                {
+                    b.HasOne("TallerVehiculos.Models.Productos", null)
+                        .WithMany("ProductImages")
+                        .HasForeignKey("ProductosId");
+                });
+
             modelBuilder.Entity("TallerVehiculos.Models.Productos", b =>
                 {
+                    b.HasOne("TallerVehiculos.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("TallerVehiculos.Models.Proveedor", null)
                         .WithMany("productos")
                         .HasForeignKey("ProveedorId");
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Sedes", b =>
@@ -359,6 +433,13 @@ namespace TallerVehiculos.Migrations
                     b.HasOne("TallerVehiculos.Models.Vehiculo", null)
                         .WithMany("servicios")
                         .HasForeignKey("VehiculoId");
+                });
+
+            modelBuilder.Entity("TallerVehiculos.Models.Usuarios", b =>
+                {
+                    b.HasOne("TallerVehiculos.Models.Sedes", null)
+                        .WithMany("usuarios")
+                        .HasForeignKey("SedesId");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Vehiculo", b =>
@@ -387,12 +468,19 @@ namespace TallerVehiculos.Migrations
 
             modelBuilder.Entity("TallerVehiculos.Models.Productos", b =>
                 {
+                    b.Navigation("ProductImages");
+
                     b.Navigation("detalleFacturas");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Proveedor", b =>
                 {
                     b.Navigation("productos");
+                });
+
+            modelBuilder.Entity("TallerVehiculos.Models.Sedes", b =>
+                {
+                    b.Navigation("usuarios");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Usuarios", b =>

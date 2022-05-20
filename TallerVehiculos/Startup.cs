@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TallerVehiculos.Data;
+using TallerVehiculos.Helpers;
 
 namespace TallerVehiculos
 {
@@ -29,6 +30,12 @@ namespace TallerVehiculos
             services.AddDbContext<AplicationDbContext>(cfg => {
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddTransient<SeedDb>();
+            services.AddScoped<IBlobHelper, BlobHelper>();
+
+            services.AddScoped<IConverterHelper, ConverterHelper>();
+            services.AddScoped<ICombosHelper, CombosHelper>();
             services.AddControllersWithViews();
         }
 

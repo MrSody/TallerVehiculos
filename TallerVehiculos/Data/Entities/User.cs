@@ -4,84 +4,85 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using TallerVehiculos.Enums;
 
-namespace TallerVehiculos.Data.Entities
-
-
-{
-    public class User : IdentityUser
-    {
-
-        [MaxLength(20)]
-
-        [Required]
-
-        public string Document { get; set; }
+namespace TallerVehiculos.Data.Entities { 
 
 
 
-        [Display(Name = "First Name")]
+    //public class User:IdentityUser
+    //{
 
-        [MaxLength(50)]
+    //    [MaxLength(20)]
 
-        [Required]
+    //    [Required]
 
-        public string FirstName { get; set; }
-
-
-
-        [Display(Name = "Last Name")]
-
-        [MaxLength(50)]
-
-        [Required]
-
-        public string LastName { get; set; }
+    //    public string Document { get; set; }
 
 
 
-        [MaxLength(100)]
+    //    [Display(Name = "First Name")]
 
-        public string Address { get; set; }
+    //    [MaxLength(50)]
 
+    //    [Required]
 
-
-        [Display(Name = "Image")]
-
-        public Guid ImageId { get; set; }
+    //    public string FirstName { get; set; }
 
 
 
-        //TODO: Pending to put the correct paths 
+    //    [Display(Name = "Last Name")]
 
-        [Display(Name = "Image")]
+    //    [MaxLength(50)]
 
-        public string ImageFullPath => ImageId == Guid.Empty
+    //    [Required]
 
-            ? $"https://localhost:44390/images/noimage.png"
-
-            : $"https://TiendaOnline.blob.core.windows.net/users/{ImageId}";
+    //    public string LastName { get; set; }
 
 
 
-        [Display(Name = "User Type")]
+    //    [MaxLength(100)]
 
-        public UserType UserType { get; set; }
-
-
-
-        //public City City { get; set; }
+    //    public string Address { get; set; }
 
 
 
-        [Display(Name = "User")]
+    //    [Display(Name = "Image")]
 
-        public string FullName => $"{FirstName} {LastName}";
+    //    public Guid ImageId { get; set; }
 
 
 
-        [Display(Name = "User")]
+    //    //TODO: Pending to put the correct paths 
 
-        public string FullNameWithDocument => $"{FirstName} {LastName} - {Document}";
-    }
+    //    [Display(Name = "Image")]
+
+    //    public string ImageFullPath => ImageId == Guid.Empty
+
+    //        ? $"https://localhost:44390/images/noimage.png"
+
+    //        : $"https://TiendaOnline.blob.core.windows.net/users/{ImageId}";
+
+
+
+    //    [Display(Name = "User Type")]
+
+    //    public UserType UserType { get; set; }
+
+
+
+    //    //public City City { get; set; }
+
+
+
+    //    [Display(Name = "User")]
+
+    //    public string FullName => $"{FirstName} {LastName}";
+
+
+
+    //    [Display(Name = "User")]
+
+    //    public string FullNameWithDocument => $"{FirstName} {LastName} - {Document}";
+    //}
 }
+
 

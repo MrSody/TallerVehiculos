@@ -41,7 +41,8 @@
                     <thead> 
                         <tr> 
                             <th> @Html.DisplayNameFor(model => model.sedes.FirstOrDefault().nombre) </th> 
-                            <th> @Html.DisplayNameFor(model => model.sedes.FirstOrDefault().direccion) </th> 
+                            <th> @Html.DisplayNameFor(model => model.sedes.FirstOrDefault().direccion) </th>
+                            <th> @Html.DisplayNameFor(model => model.sedes.FirstOrDefault().UsuariosNumber) </th>
                             <th></th> 
                         </tr> 
                     </thead> 
@@ -50,6 +51,7 @@
                             <tr> 
                                 <td> @Html.DisplayFor(modelItem => item.nombre) </td> 
                                 <td> @Html.DisplayFor(modelItem => item.direccion) </td> 
+                                <td> @Html.DisplayFor(modelItem => item.UsuariosNumber) </td> 
                                 <td> 
                                     <a asp-action="EditSede" asp-route-id="@item.Id" class="btn btn-warning">
                                         <i class="fas fa-edit"></i>

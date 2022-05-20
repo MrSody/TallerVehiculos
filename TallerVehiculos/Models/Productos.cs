@@ -1,17 +1,42 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace TallerVehiculos.Models
 {
     public class Productos
     {
+
+
+
         public int Id { get; set; }
+        [MaxLength(50)]
         [Required]
-        [MaxLength(50, ErrorMessage = "el campo {0} debe contener almenos un caracter")]
+        
         public string Nombre { get; set; }
-        public int precio { get; set; }
-        public int cantidad { get; set; }
+        [DataType(DataType.MultilineText)] 
+        
+        public string descripcion { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C2}")] 
+        
+        public double precio { get; set; }
+        [DisplayName("Is Active")]
+        
+        public bool IsActive { get; set; }
+        [DisplayName("Is Starred")] 
+        
+        public bool IsStarred { get; set; }
+
+        public Category Category { get; set; }
+        public ICollection<ProductImage> ProductImages { get; set; }
+        [DisplayName("Product Images Number")] public int ProductImagesNumber => ProductImages == null ? 0 : ProductImages.Count;
+        //TO DO: Pendiente cambiar los paths por los de Azure
+        [Display(Name = "Image")] public string ImageFullPath => ProductImages == null || ProductImages.Count == 0 ? $"https://localhost:44390/images/noimage.png" : ProductImages.FirstOrDefault().ImageFullPath;
+
+
         public ICollection<DetalleFactura> detalleFacturas { get; set; }
+
 
     }
 }

@@ -8,6 +8,8 @@ namespace TallerVehiculos.Data
         public AplicationDbContext(DbContextOptions<AplicationDbContext> options) : base(options)
         {
         }
+        public DbSet<Category> Categories { get; set; }
+
         public DbSet<Ciudades> ciudades { get; set; }
         
 
@@ -28,6 +30,8 @@ namespace TallerVehiculos.Data
         public DbSet<Usuarios> usuarios { get; set; }
 
         public DbSet<Vehiculo> vehiculo { get; set; }
+
+        public DbSet<ProductImage> ProductImages { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -74,6 +78,10 @@ namespace TallerVehiculos.Data
             modelBuilder.Entity<DetalleFactura>()
         .HasIndex(t => t.Id)
         .IsUnique();
+
+            modelBuilder.Entity<Category>()
+                .HasIndex(t => t.Name)
+                .IsUnique();
 
 
         }
