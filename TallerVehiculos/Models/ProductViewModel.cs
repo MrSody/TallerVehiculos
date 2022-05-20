@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 using System.Collections.Generic;
 
@@ -9,6 +10,9 @@ namespace TallerVehiculos.Models
     public class ProductViewModel : Productos
 
     {
+        [Display(Name = "Image")]
+
+        public IFormFile ImageFile { get; set; }
 
         [Display(Name = "Category")]
 
