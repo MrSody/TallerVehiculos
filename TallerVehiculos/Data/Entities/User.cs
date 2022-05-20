@@ -3,13 +3,15 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.ComponentModel.DataAnnotations;
 using TallerVehiculos.Enums;
+using TallerVehiculos.Models;
 
 namespace TallerVehiculos.Data.Entities {
 
 
 
-    public class User {  
-    
+    public class User : IdentityUser
+    {
+
 
         [MaxLength(20)]
 
@@ -49,7 +51,7 @@ namespace TallerVehiculos.Data.Entities {
 
         public Guid ImageId { get; set; }
 
-
+        public Ciudades City { get; set; }
 
         //TODO: Pending to put the correct paths 
 

@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using TallerVehiculos.Data.Entities;
 using TallerVehiculos.Models;
 
 namespace TallerVehiculos.Data
 {
-    public class AplicationDbContext : DbContext
+    public class AplicationDbContext : IdentityDbContext<User>
     {
         public AplicationDbContext(DbContextOptions<AplicationDbContext> options) : base(options)
         {

@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TallerVehiculos.Data;
 using TallerVehiculos.Helpers;
+using TallerVehiculos.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace TallerVehiculos
 {
@@ -31,11 +33,32 @@ namespace TallerVehiculos
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddIdentity<User, IdentityRole>(cfg =>
+
+            {
+
+                cfg.User.RequireUniqueEmail = true;
+
+                cfg.Password.RequireDigit = false;
+
+                cfg.Password.RequiredUniqueChars = 0;
+
+                cfg.Password.RequireLowercase = false;
+
+                cfg.Password.RequireNonAlphanumeric = false;
+
+                cfg.Password.RequireUppercase = false;
+
+            }).AddEntityFrameworkStores<AplicationDbContext>();
+
             services.AddTransient<SeedDb>();
             services.AddScoped<IBlobHelper, BlobHelper>();
 
             services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddScoped<ICombosHelper, CombosHelper>();
+
+            services.AddScoped<IuserHelper, UserHelper>();
+
             services.AddControllersWithViews();
         }
 
@@ -54,7 +77,7 @@ namespace TallerVehiculos
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseAuthorization();
