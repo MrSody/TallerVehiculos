@@ -375,7 +375,7 @@ namespace TallerVehiculos.Controllers
             Sedes sedes = await _context.sedes
                                 .FirstOrDefaultAsync(c => c.usuarios.FirstOrDefault(d => d.id == usuario.id) != null);
             // ERROR
-            //_context.sedes.Remove(usuario); 
+            _context.usuarios.Remove(usuario); 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Details), new { Id = sedes.Id });
         }
