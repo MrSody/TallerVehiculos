@@ -24,25 +24,55 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Clientes" asp-action="Index">Cliente</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Ciudades" asp-action="Index">Ciudades</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Proveedores" asp-action="Index">Proveedores</a>
-                        </li>
-                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Facturas" asp-action="Index">Facturas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                         
+
+                      @*  @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+
+                        {*@
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Clientes" asp-action="Index">Cliente</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Ciudades" asp-action="Index">Ciudades</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Proveedores" asp-action="Index">Proveedores</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Facturas" asp-action="Index">Facturas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
                             </li>
 
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Productos" asp-action="Index">Productos</a> 
-                           </li> 
+                            </li>
+
+                        @*}*@
+                        <ul class="nav navbar-nav navbar-right"> 
+
+@if (User.Identity.IsAuthenticated) 
+
+{ 
+
+<li><a asp-area="" asp-controller="Account" asp-action="ChangeUser">@User.Identity.Name</a></li> 
+
+<li><a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a></li> 
+
+ } 
+
+ else 
+
+ { 
+
+ <li><a asp-area="" asp-controller="Account" asp-action="Login">Login</a></li> 
+
+ }     
+
+
+                       
+                        
                     </ul>
                 </div>
             </div>

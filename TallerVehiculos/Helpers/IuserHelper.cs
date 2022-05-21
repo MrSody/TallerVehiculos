@@ -8,11 +8,22 @@ using System.Threading.Tasks;
 
 using TallerVehiculos.Data;
 using Microsoft.EntityFrameworkCore;
+using TallerVehiculos.Models;
+using System;
+using TallerVehiculos.Enums;
+using System.Linq;
 
 namespace TallerVehiculos.Helpers
 {
     public interface IuserHelper
     {
+
+        Task<SignInResult> LoginAsync(LoginViewModel model);
+
+        Task<User> AddUserAsync(AddUserViewModel model, Guid imageId, UserType userType);
+
+        Task LogoutAsync();
+
         Task<User> GetUserAsync(string email);
 
 
@@ -43,9 +54,10 @@ namespace TallerVehiculos.Helpers
 
         private readonly RoleManager<IdentityRole> _roleManager;
 
+        private readonly SignInManager<User> _signInManager;
 
 
-        public UserHelper(AplicationDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public UserHelper(AplicationDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager) 
 
         {
 
@@ -55,6 +67,7 @@ namespace TallerVehiculos.Helpers
 
             _roleManager = roleManager;
 
+                _signInManager = signInManager; 
         }
 
 
@@ -62,7 +75,7 @@ namespace TallerVehiculos.Helpers
         public async Task<IdentityResult> AddUserAsync(User user, string password)
 
         {
-
+            
             return await _userManager.CreateAsync(user, password);
 
         }
@@ -122,6 +135,85 @@ namespace TallerVehiculos.Helpers
         {
 
             return await _userManager.IsInRoleAsync(user, roleName);
+
+        }
+
+
+        public async Task<SignInResult> LoginAsync(LoginViewModel model)
+
+        {
+
+            return await _signInManager.PasswordSignInAsync(
+
+                model.Username,
+
+                model.Password,
+
+                model.RememberMe,
+
+                false);
+
+        }
+
+
+
+        public async Task LogoutAsync()
+
+        {
+
+            await _signInManager.SignOutAsync();
+
+        }
+
+        public async Task<User> AddUserAsync(AddUserViewModel model, Guid imageId, UserType userType)
+
+        {
+
+            User user = new User
+
+            {
+
+                Address = model.Address,
+
+                Document = model.Document,
+
+                Email = model.Username,
+
+                FirstName = model.FirstName,
+
+                LastName = model.LastName,
+
+                ImageId = imageId,
+
+                PhoneNumber = model.PhoneNumber,
+
+                City = await _context.ciudades.FindAsync(model.CityId),
+
+                UserName = model.Username,
+
+                UserType = userType
+
+            };
+
+
+
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result != IdentityResult.Success)
+
+            {
+
+                return null;
+
+            }
+
+
+
+            User newUser = await GetUserAsync(model.Username);
+
+            await AddUserToRoleAsync(newUser, user.UserType.ToString());
+
+            return newUser;
 
         }
 

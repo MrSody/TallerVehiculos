@@ -93,7 +93,7 @@ public class SeedDb
 
 
 
-            await _userHelper.AddUserAsync(user, "1234");
+            await _userHelper.AddUserAsync(user, "ABC123");
 
             await _userHelper.AddUserToRoleAsync(user, userType.ToString());
 

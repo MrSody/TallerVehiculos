@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace TallerVehiculos.Models
 {
+    [Authorize(Roles = "Admin")]
+
     public class Usuarios
     {
         public int id { get; set; }

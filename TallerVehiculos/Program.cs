@@ -29,7 +29,6 @@ namespace TallerVehiculos
             using (IServiceScope scope = scopeFactory.CreateScope())
             {
                 SeedDb seeder = scope.ServiceProvider.GetService<SeedDb>();
-                seeder.SeedAsync().Wait();
             }
         }
 

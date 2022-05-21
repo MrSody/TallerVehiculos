@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace TallerVehiculos.Models
 {
+    [Authorize(Roles = "Admin")]
     public class Ciudades
     {
 

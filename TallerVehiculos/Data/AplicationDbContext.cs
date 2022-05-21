@@ -13,7 +13,10 @@ namespace TallerVehiculos.Data
         public DbSet<Category> Categories { get; set; }
 
         public DbSet<Ciudades> ciudades { get; set; }
-        
+
+        public DbSet<Order> Orders { get; set; }
+
+        public DbSet<OrderDetail> OrderDetails { get; set; }
 
         public DbSet<Clientes> clientes { get; set; }
 

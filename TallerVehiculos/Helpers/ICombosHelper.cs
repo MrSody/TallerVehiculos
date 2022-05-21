@@ -6,12 +6,16 @@ using System.Linq;
 using TallerVehiculos.Data;
 using System.Collections.Generic;
 using TallerVehiculos.Data;
+using TallerVehiculos.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace TallerVehiculos.Helpers
 {
     public interface ICombosHelper
     {
         IEnumerable<SelectListItem> GetComboCategories();
+
+   
     }
 
     public class CombosHelper : ICombosHelper
@@ -67,6 +71,152 @@ namespace TallerVehiculos.Helpers
             return list;
 
         }
+
+//        public IEnumerable<SelectListItem> GetComboCities(int departmentId) 
+
+//{ 
+
+//    List<SelectListItem> list = new List<SelectListItem>(); 
+
+//    Ciudades department = _context.ciudades 
+
+//        .Include(d => d.sedes) 
+
+//        .FirstOrDefault(d => d.Id == departmentId); 
+
+//    if (department != null) 
+
+//    { 
+
+//        list = department.sedes.Select(t => new SelectListItem 
+
+//        { 
+
+//            Text = t.nombre, 
+
+//            Value = $"{t.Id}" 
+
+//        }) 
+
+//            .OrderBy(t => t.Text) 
+
+//            .ToList(); 
+
+//    } 
+
+ 
+
+//    list.Insert(0, new SelectListItem 
+
+//    { 
+
+//        Text = "[Select a city...]", 
+
+//        Value = "0" 
+
+//    }); 
+
+ 
+
+//    return list; 
+
+//} 
+
+ 
+
+//public IEnumerable<SelectListItem> GetComboCountries() 
+
+//{ 
+
+//    List<SelectListItem> list = _context.sedes.Select(t => new SelectListItem 
+
+//    { 
+
+//        Text = t.nombre, 
+
+//        Value = $"{t.Id}" 
+
+//    }) 
+
+//        .OrderBy(t => t.Text) 
+
+//        .ToList(); 
+
+ 
+
+//    list.Insert(0, new SelectListItem 
+
+//    { 
+
+//        Text = "[Select a sede...]", 
+
+//        Value = "0" 
+
+//    }); 
+
+ 
+
+//    return list; 
+
+//} 
+
+ 
+
+//public IEnumerable<SelectListItem> GetComboDepartments(int countryId) 
+
+//{ 
+
+//    List<SelectListItem> list = new List<SelectListItem>(); 
+
+//    Sedes country = _context.sedes 
+
+//        .Include(c => c.nombre) 
+
+//        .FirstOrDefault(c => c.IdCiudades == countryId); 
+
+//    if (country != null) 
+
+//    { 
+
+//        list = country.usuarios.Select(t => new SelectListItem 
+
+//        { 
+
+//            Text = t.nombre, 
+
+//            Value = $"{t.id}" 
+
+//        }) 
+
+//            .OrderBy(t => t.Text) 
+
+//            .ToList(); 
+
+//    } 
+
+ 
+
+//    list.Insert(0, new SelectListItem 
+
+//    { 
+
+//        Text = "[Select a usuarios...]", 
+
+//        Value = "0" 
+
+//    }); 
+
+ 
+
+//    return list; 
+
+//} 
+
+ 
+
+ 
+
+ 
 
     }
 }
