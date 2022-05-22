@@ -43,8 +43,35 @@ namespace TallerVehiculos.Data
         {
             base.OnModelCreating(modelBuilder);
 
+
+            //modelBuilder.Entity<Ciudades>(ciu =>
+            //{
+            //    ciu.HasIndex("Nombre").IsUnique();
+            //    ciu.HasMany(c => c.sedes).WithOne(d => d.Ciudades).OnDelete(DeleteBehavior.Cascade);
+            //});
+
+            //modelBuilder.Entity<Sedes>(sed =>
+            //{
+            //    sed.HasIndex("id", "CiudadesId").IsUnique();
+            //    sed.HasOne(d => d.Ciudades).WithMany(c => c.sedes).OnDelete(DeleteBehavior.Cascade);
+            //});
+
+            //modelBuilder.Entity<Usuarios>(usu =>
+            //{
+            //    usu.HasIndex("id", "SedesId").IsUnique();
+            //    usu.HasOne(c => c.Sedes).WithMany(d => d.usuarios).OnDelete(DeleteBehavior.Cascade);
+            //});
+
             modelBuilder.Entity<Ciudades>()
             .HasIndex(t => t.Nombre)
+            .IsUnique();
+
+            modelBuilder.Entity<Sedes>()
+            .HasIndex(t => t.Id)
+            .IsUnique();
+
+            modelBuilder.Entity<Usuarios>()
+            .HasIndex(t => t.id)
             .IsUnique();
 
             modelBuilder.Entity<Clientes>()
@@ -64,16 +91,8 @@ namespace TallerVehiculos.Data
          .HasIndex(t => t.Id)
          .IsUnique();
 
-            modelBuilder.Entity<Sedes>()
-         .HasIndex(t => t.Id)
-         .IsUnique();
-
             modelBuilder.Entity<Servicio>()
          .HasIndex(t => t.Nombre)
-         .IsUnique();
-
-            modelBuilder.Entity<Usuarios>()
-         .HasIndex(t => t.id)
          .IsUnique();
 
             modelBuilder.Entity<Vehiculo>()

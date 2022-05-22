@@ -12,8 +12,8 @@ using TallerVehiculos.Data;
 namespace TallerVehiculos.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    [Migration("20220520215707_TallerVehiculos5")]
-    partial class TallerVehiculos5
+    [Migration("20220522222235_TallerVehiculos")]
+    partial class TallerVehiculos
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -169,9 +169,6 @@ namespace TallerVehiculos.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("CityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -227,6 +224,9 @@ namespace TallerVehiculos.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SedesId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -239,8 +239,6 @@ namespace TallerVehiculos.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CityId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -248,6 +246,8 @@ namespace TallerVehiculos.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("SedesId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -339,7 +339,6 @@ namespace TallerVehiculos.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("cantidad")
-                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.Property<double>("total")
@@ -365,10 +364,10 @@ namespace TallerVehiculos.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("ClientesId")
+                    b.Property<int>("ClientesId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Usuariosid")
+                    b.Property<int>("Usuariosid")
                         .HasColumnType("int");
 
                     b.Property<string>("fecha")
@@ -389,6 +388,71 @@ namespace TallerVehiculos.Migrations
                     b.HasIndex("Usuariosid");
 
                     b.ToTable("facturas");
+                });
+
+            modelBuilder.Entity("TallerVehiculos.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateConfirmed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateSent")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("TallerVehiculos.Models.OrderDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.ProductImage", b =>
@@ -491,9 +555,6 @@ namespace TallerVehiculos.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("CiudadesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCiudades")
                         .HasColumnType("int");
 
                     b.Property<string>("direccion")
@@ -660,11 +721,11 @@ namespace TallerVehiculos.Migrations
 
             modelBuilder.Entity("TallerVehiculos.Data.Entities.User", b =>
                 {
-                    b.HasOne("TallerVehiculos.Models.Ciudades", "City")
+                    b.HasOne("TallerVehiculos.Models.Sedes", "Sedes")
                         .WithMany()
-                        .HasForeignKey("CityId");
+                        .HasForeignKey("SedesId");
 
-                    b.Navigation("City");
+                    b.Navigation("Sedes");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.DetalleFactura", b =>
@@ -682,11 +743,37 @@ namespace TallerVehiculos.Migrations
                 {
                     b.HasOne("TallerVehiculos.Models.Clientes", null)
                         .WithMany("facturas")
-                        .HasForeignKey("ClientesId");
+                        .HasForeignKey("ClientesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TallerVehiculos.Models.Usuarios", null)
                         .WithMany("facturas")
-                        .HasForeignKey("Usuariosid");
+                        .HasForeignKey("Usuariosid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TallerVehiculos.Models.Order", b =>
+                {
+                    b.HasOne("TallerVehiculos.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TallerVehiculos.Models.OrderDetail", b =>
+                {
+                    b.HasOne("TallerVehiculos.Models.Order", null)
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("TallerVehiculos.Models.Productos", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.ProductImage", b =>
@@ -711,9 +798,11 @@ namespace TallerVehiculos.Migrations
 
             modelBuilder.Entity("TallerVehiculos.Models.Sedes", b =>
                 {
-                    b.HasOne("TallerVehiculos.Models.Ciudades", null)
+                    b.HasOne("TallerVehiculos.Models.Ciudades", "Ciudades")
                         .WithMany("sedes")
                         .HasForeignKey("CiudadesId");
+
+                    b.Navigation("Ciudades");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Servicio", b =>
@@ -725,9 +814,11 @@ namespace TallerVehiculos.Migrations
 
             modelBuilder.Entity("TallerVehiculos.Models.Usuarios", b =>
                 {
-                    b.HasOne("TallerVehiculos.Models.Sedes", null)
+                    b.HasOne("TallerVehiculos.Models.Sedes", "Sedes")
                         .WithMany("usuarios")
                         .HasForeignKey("SedesId");
+
+                    b.Navigation("Sedes");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Vehiculo", b =>
@@ -752,6 +843,11 @@ namespace TallerVehiculos.Migrations
             modelBuilder.Entity("TallerVehiculos.Models.Factura", b =>
                 {
                     b.Navigation("detalleFacturas");
+                });
+
+            modelBuilder.Entity("TallerVehiculos.Models.Order", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("TallerVehiculos.Models.Productos", b =>

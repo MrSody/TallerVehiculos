@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TallerVehiculos.Migrations
 {
-    public partial class TallerVehiculo : Migration
+    public partial class TallerVehiculos : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -102,43 +102,6 @@ namespace TallerVehiculos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Document = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CityId = table.Column<int>(type: "int", nullable: true),
-                    UserType = table.Column<int>(type: "int", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_ciudades_CityId",
-                        column: x => x.CityId,
-                        principalTable: "ciudades",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "sedes",
                 columns: table => new
                 {
@@ -146,7 +109,6 @@ namespace TallerVehiculos.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IdCiudades = table.Column<int>(type: "int", nullable: false),
                     CiudadesId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -206,6 +168,103 @@ namespace TallerVehiculos.Migrations
                         name: "FK_productos_proveedores_ProveedorId",
                         column: x => x.ProveedorId,
                         principalTable: "proveedores",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Document = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserType = table.Column<int>(type: "int", nullable: false),
+                    SedesId = table.Column<int>(type: "int", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_sedes_SedesId",
+                        column: x => x.SedesId,
+                        principalTable: "sedes",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "usuarios",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    edad = table.Column<int>(type: "int", nullable: false),
+                    correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SedesId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_usuarios", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_usuarios_sedes_SedesId",
+                        column: x => x.SedesId,
+                        principalTable: "sedes",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "servicio",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    precio = table.Column<double>(type: "float", nullable: false),
+                    VehiculoId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_servicio", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_servicio_vehiculo_VehiculoId",
+                        column: x => x.VehiculoId,
+                        principalTable: "vehiculo",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductImages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductosId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductImages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductImages_productos_ProductosId",
+                        column: x => x.ProductosId,
+                        principalTable: "productos",
                         principalColumn: "Id");
                 });
 
@@ -295,62 +354,25 @@ namespace TallerVehiculos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "usuarios",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    edad = table.Column<int>(type: "int", nullable: false),
-                    correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SedesId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_usuarios", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_usuarios_sedes_SedesId",
-                        column: x => x.SedesId,
-                        principalTable: "sedes",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "servicio",
+                name: "Orders",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    precio = table.Column<double>(type: "float", nullable: false),
-                    VehiculoId = table.Column<int>(type: "int", nullable: true)
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    OrderStatus = table.Column<int>(type: "int", nullable: false),
+                    DateSent = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DateConfirmed = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_servicio", x => x.Id);
+                    table.PrimaryKey("PK_Orders", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_servicio_vehiculo_VehiculoId",
-                        column: x => x.VehiculoId,
-                        principalTable: "vehiculo",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductImages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductosId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductImages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductImages_productos_ProductosId",
-                        column: x => x.ProductosId,
-                        principalTable: "productos",
+                        name: "FK_Orders_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
 
@@ -362,8 +384,8 @@ namespace TallerVehiculos.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     fecha = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     total = table.Column<double>(type: "float", nullable: false),
-                    ClientesId = table.Column<int>(type: "int", nullable: true),
-                    Usuariosid = table.Column<int>(type: "int", nullable: true)
+                    ClientesId = table.Column<int>(type: "int", nullable: false),
+                    Usuariosid = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -372,12 +394,41 @@ namespace TallerVehiculos.Migrations
                         name: "FK_facturas_clientes_ClientesId",
                         column: x => x.ClientesId,
                         principalTable: "clientes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_facturas_usuarios_Usuariosid",
                         column: x => x.Usuariosid,
                         principalTable: "usuarios",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    Quantity = table.Column<float>(type: "real", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Remarks = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_OrderDetails_productos_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "productos",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -386,7 +437,7 @@ namespace TallerVehiculos.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    cantidad = table.Column<int>(type: "int", maxLength: 50, nullable: false),
+                    cantidad = table.Column<int>(type: "int", nullable: false),
                     total = table.Column<double>(type: "float", nullable: false),
                     FacturaId = table.Column<int>(type: "int", nullable: true),
                     ProductosId = table.Column<int>(type: "int", nullable: true)
@@ -439,9 +490,9 @@ namespace TallerVehiculos.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_CityId",
+                name: "IX_AspNetUsers_SedesId",
                 table: "AspNetUsers",
-                column: "CityId");
+                column: "SedesId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -499,6 +550,21 @@ namespace TallerVehiculos.Migrations
                 name: "IX_facturas_Usuariosid",
                 table: "facturas",
                 column: "Usuariosid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_OrderId",
+                table: "OrderDetails",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_ProductId",
+                table: "OrderDetails",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_UserId",
+                table: "Orders",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductImages_ProductosId",
@@ -593,6 +659,9 @@ namespace TallerVehiculos.Migrations
                 name: "detalleFacturas");
 
             migrationBuilder.DropTable(
+                name: "OrderDetails");
+
+            migrationBuilder.DropTable(
                 name: "ProductImages");
 
             migrationBuilder.DropTable(
@@ -602,10 +671,10 @@ namespace TallerVehiculos.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "facturas");
 
             migrationBuilder.DropTable(
-                name: "facturas");
+                name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "productos");
@@ -615,6 +684,9 @@ namespace TallerVehiculos.Migrations
 
             migrationBuilder.DropTable(
                 name: "usuarios");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Categories");

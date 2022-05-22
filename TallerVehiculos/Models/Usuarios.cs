@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace TallerVehiculos.Models
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
 
     public class Usuarios
     {
@@ -17,9 +17,14 @@ namespace TallerVehiculos.Models
         public int edad { get; set; }
         public string correo { get; set; }
 
-        //public int IdSede { get; set; }
         public ICollection<Factura> facturas { get; set; }
 
+        //[JsonIgnore]
+        //[NotMapped]
+        //public int SedesId { get; set; }
+
+        [JsonIgnore]
+        public Sedes Sedes { get; set; }
     }
 }
 

@@ -14,6 +14,12 @@ using TallerVehiculos.Helpers;
 using TallerVehiculos.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 
+
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+
+
 namespace TallerVehiculos
 {
     public class Startup
@@ -33,32 +39,42 @@ namespace TallerVehiculos
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            services.AddIdentity<User, IdentityRole>(cfg =>
-
+            services.ConfigureApplicationCookie(options =>
             {
+                options.LoginPath = "/Account/NotAuthorized";
+                options.AccessDeniedPath = "/Account/NotAuthorized";
+            });
 
+
+            services.AddIdentity<User, IdentityRole>(cfg =>
+            {
                 cfg.User.RequireUniqueEmail = true;
-
                 cfg.Password.RequireDigit = false;
-
                 cfg.Password.RequiredUniqueChars = 0;
-
                 cfg.Password.RequireLowercase = false;
-
                 cfg.Password.RequireNonAlphanumeric = false;
-
                 cfg.Password.RequireUppercase = false;
-
             }).AddEntityFrameworkStores<AplicationDbContext>();
 
-            services.AddTransient<SeedDb>();
+            services.AddAuthentication()
+            .AddCookie()
+            .AddJwtBearer(cfg =>
+            {
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = Configuration["Tokens:Issuer"],
+                    ValidAudience = Configuration["Tokens:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]))
+                };
+            });
+
             services.AddScoped<IBlobHelper, BlobHelper>();
 
             services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddScoped<ICombosHelper, CombosHelper>();
+            services.AddScoped<IUserHelper, UserHelper>();
 
-            services.AddScoped<IuserHelper, UserHelper>();
-
+            services.AddTransient<SeedDb>();
             services.AddControllersWithViews();
         }
 
@@ -75,6 +91,7 @@ namespace TallerVehiculos
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();

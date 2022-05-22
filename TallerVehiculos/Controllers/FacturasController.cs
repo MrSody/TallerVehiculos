@@ -30,8 +30,6 @@ namespace TallerVehiculos.Controllers
         {
               return View(await _context.facturas
                   .Include(c => c.detalleFacturas)
-                  .Include(d => d.Clientes)
-                  .Include(b => b.Usuario)
                   .ToListAsync());
         }
 
@@ -44,8 +42,9 @@ namespace TallerVehiculos.Controllers
             }
 
             var factura = await _context.facturas
-                .Include(c => c.detalleFacturas)
+                .Include(f => f.detalleFacturas)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (factura == null)
             {
                 return NotFound();
@@ -161,8 +160,11 @@ namespace TallerVehiculos.Controllers
         
             {
                 if (id == null) { return NotFound(); }
-                Factura factura = await _context.facturas.FirstOrDefaultAsync(m => m.Id == id); if (factura == null) { return NotFound(); }
-                _context.facturas.Remove(factura); await _context.SaveChangesAsync(); return RedirectToAction(nameof(Index));
+                Factura factura = await _context.facturas.FirstOrDefaultAsync(m => m.Id == id); 
+                if (factura == null) { return NotFound(); }
+                _context.facturas.Remove(factura); 
+                await _context.SaveChangesAsync(); 
+                return RedirectToAction(nameof(Index));
             }
         
 
