@@ -1,24 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TallerVehiculos.Data;
 using TallerVehiculos.Helpers;
 using TallerVehiculos.Data.Entities;
 using Microsoft.AspNetCore.Identity;
-
-
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
-
 
 namespace TallerVehiculos
 {
@@ -34,7 +25,16 @@ namespace TallerVehiculos
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<SeedDb>();
             services.AddControllersWithViews();
+
+            services.AddScoped<IBlobHelper, BlobHelper>();
+
+            services.AddScoped<IConverterHelper, ConverterHelper>();
+            services.AddScoped<ICombosHelper, CombosHelper>();
+            services.AddScoped<IUserHelper, UserHelper>();
+
+
             services.AddDbContext<AplicationDbContext>(cfg => {
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
@@ -67,15 +67,6 @@ namespace TallerVehiculos
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]))
                 };
             });
-
-            services.AddScoped<IBlobHelper, BlobHelper>();
-
-            services.AddScoped<IConverterHelper, ConverterHelper>();
-            services.AddScoped<ICombosHelper, CombosHelper>();
-            services.AddScoped<IUserHelper, UserHelper>();
-
-            services.AddTransient<SeedDb>();
-            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
