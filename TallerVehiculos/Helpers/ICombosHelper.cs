@@ -15,7 +15,10 @@ namespace TallerVehiculos.Helpers
     {
         IEnumerable<SelectListItem> GetComboCategories();
 
-   
+        IEnumerable<SelectListItem> GetComboClientes();
+
+        IEnumerable<SelectListItem> GetComboUsuarios();
+
     }
 
     public class CombosHelper : ICombosHelper
@@ -27,17 +30,11 @@ namespace TallerVehiculos.Helpers
 
 
         public CombosHelper(AplicationDbContext context)
-
         {
-
             _context = context;
-
         }
 
-
-
         public IEnumerable<SelectListItem> GetComboCategories()
-
         {
 
             List<SelectListItem> list = _context.Categories.Select(t => new SelectListItem
@@ -72,151 +69,201 @@ namespace TallerVehiculos.Helpers
 
         }
 
-//        public IEnumerable<SelectListItem> GetComboCities(int departmentId) 
+        public IEnumerable<SelectListItem> GetComboClientes()
+        {
 
-//{ 
+            List<SelectListItem> list = _context.clientes.Select(t => new SelectListItem
+            {
 
-//    List<SelectListItem> list = new List<SelectListItem>(); 
+                Text = t.Nombre,
 
-//    Ciudades department = _context.ciudades 
+                Value = $"{t.Id}"
 
-//        .Include(d => d.sedes) 
+            })
+                .OrderBy(t => t.Text)
+                .ToList();
 
-//        .FirstOrDefault(d => d.Id == departmentId); 
 
-//    if (department != null) 
 
-//    { 
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Selecciona un cliente...]",
+                Value = "0"
+            });
 
-//        list = department.sedes.Select(t => new SelectListItem 
+            return list;
+        }
 
-//        { 
+        public IEnumerable<SelectListItem> GetComboUsuarios()
+        {
 
-//            Text = t.nombre, 
+            List<SelectListItem> list = _context.usuarios.Select(t => new SelectListItem
+            {
 
-//            Value = $"{t.Id}" 
+                Text = t.nombre,
 
-//        }) 
+                Value = $"{t.id}"
 
-//            .OrderBy(t => t.Text) 
+            })
+                .OrderBy(t => t.Text)
+                .ToList();
 
-//            .ToList(); 
 
-//    } 
 
- 
+            list.Insert(0, new SelectListItem
+            {
+                Text = "[Selecciona un usuario...]",
+                Value = "0"
+            });
 
-//    list.Insert(0, new SelectListItem 
+            return list;
+        }
 
-//    { 
+        //        public IEnumerable<SelectListItem> GetComboCities(int departmentId) 
 
-//        Text = "[Select a city...]", 
+        //{ 
 
-//        Value = "0" 
+        //    List<SelectListItem> list = new List<SelectListItem>(); 
 
-//    }); 
+        //    Ciudades department = _context.ciudades 
 
- 
+        //        .Include(d => d.sedes) 
 
-//    return list; 
+        //        .FirstOrDefault(d => d.Id == departmentId); 
 
-//} 
+        //    if (department != null) 
 
- 
+        //    { 
 
-//public IEnumerable<SelectListItem> GetComboCountries() 
+        //        list = department.sedes.Select(t => new SelectListItem 
 
-//{ 
+        //        { 
 
-//    List<SelectListItem> list = _context.sedes.Select(t => new SelectListItem 
+        //            Text = t.nombre, 
 
-//    { 
+        //            Value = $"{t.Id}" 
 
-//        Text = t.nombre, 
+        //        }) 
 
-//        Value = $"{t.Id}" 
+        //            .OrderBy(t => t.Text) 
 
-//    }) 
+        //            .ToList(); 
 
-//        .OrderBy(t => t.Text) 
+        //    } 
 
-//        .ToList(); 
 
- 
 
-//    list.Insert(0, new SelectListItem 
+        //    list.Insert(0, new SelectListItem 
 
-//    { 
+        //    { 
 
-//        Text = "[Select a sede...]", 
+        //        Text = "[Select a city...]", 
 
-//        Value = "0" 
+        //        Value = "0" 
 
-//    }); 
+        //    }); 
 
- 
 
-//    return list; 
 
-//} 
+        //    return list; 
 
- 
+        //} 
 
-//public IEnumerable<SelectListItem> GetComboDepartments(int countryId) 
 
-//{ 
 
-//    List<SelectListItem> list = new List<SelectListItem>(); 
+        //public IEnumerable<SelectListItem> GetComboCountries() 
 
-//    Sedes country = _context.sedes 
+        //{ 
 
-//        .Include(c => c.nombre) 
+        //    List<SelectListItem> list = _context.sedes.Select(t => new SelectListItem 
 
-//        .FirstOrDefault(c => c.IdCiudades == countryId); 
+        //    { 
 
-//    if (country != null) 
+        //        Text = t.nombre, 
 
-//    { 
+        //        Value = $"{t.Id}" 
 
-//        list = country.usuarios.Select(t => new SelectListItem 
+        //    }) 
 
-//        { 
+        //        .OrderBy(t => t.Text) 
 
-//            Text = t.nombre, 
+        //        .ToList(); 
 
-//            Value = $"{t.id}" 
 
-//        }) 
 
-//            .OrderBy(t => t.Text) 
+        //    list.Insert(0, new SelectListItem 
 
-//            .ToList(); 
+        //    { 
 
-//    } 
+        //        Text = "[Select a sede...]", 
 
- 
+        //        Value = "0" 
 
-//    list.Insert(0, new SelectListItem 
+        //    }); 
 
-//    { 
 
-//        Text = "[Select a usuarios...]", 
 
-//        Value = "0" 
+        //    return list; 
 
-//    }); 
+        //} 
 
- 
 
-//    return list; 
 
-//} 
+        //public IEnumerable<SelectListItem> GetComboDepartments(int countryId) 
 
- 
+        //{ 
 
- 
+        //    List<SelectListItem> list = new List<SelectListItem>(); 
 
- 
+        //    Sedes country = _context.sedes 
+
+        //        .Include(c => c.nombre) 
+
+        //        .FirstOrDefault(c => c.IdCiudades == countryId); 
+
+        //    if (country != null) 
+
+        //    { 
+
+        //        list = country.usuarios.Select(t => new SelectListItem 
+
+        //        { 
+
+        //            Text = t.nombre, 
+
+        //            Value = $"{t.id}" 
+
+        //        }) 
+
+        //            .OrderBy(t => t.Text) 
+
+        //            .ToList(); 
+
+        //    } 
+
+
+
+        //    list.Insert(0, new SelectListItem 
+
+        //    { 
+
+        //        Text = "[Select a usuarios...]", 
+
+        //        Value = "0" 
+
+        //    }); 
+
+
+
+        //    return list; 
+
+        //} 
+
+
+
+
+
+
 
     }
 }

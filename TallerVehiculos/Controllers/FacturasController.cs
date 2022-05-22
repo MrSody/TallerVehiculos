@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TallerVehiculos.Data;
+using TallerVehiculos.Helpers;
 using TallerVehiculos.Models;
 
 namespace TallerVehiculos.Controllers
@@ -13,10 +14,15 @@ namespace TallerVehiculos.Controllers
     public class FacturasController : Controller
     {
         private readonly AplicationDbContext _context;
+        //new
+        private readonly ICombosHelper _combosHelper;
 
-        public FacturasController(AplicationDbContext context)
+
+        public FacturasController(AplicationDbContext context, ICombosHelper combosHelper)
         {
             _context = context;
+            //new
+            _combosHelper = combosHelper;
         }
 
         // GET: Facturas
@@ -24,6 +30,8 @@ namespace TallerVehiculos.Controllers
         {
               return View(await _context.facturas
                   .Include(c => c.detalleFacturas)
+                  .Include(d => d.Clientes)
+                  .Include(b => b.Usuario)
                   .ToListAsync());
         }
 
@@ -49,7 +57,13 @@ namespace TallerVehiculos.Controllers
         // GET: Facturas/Create
         public IActionResult Create()
         {
-            return View();
+            Factura model = new Factura
+            {
+                Clientes = _combosHelper.GetComboClientes(),
+                Usuario = _combosHelper.GetComboUsuarios(),
+            };
+
+            return View(model);
         }
 
         // POST: Facturas/Create
@@ -57,7 +71,7 @@ namespace TallerVehiculos.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,fecha,total")] Factura factura)
+        public async Task<IActionResult> Create([Bind("Id,fecha,total,ClientesId,Usuariosid")] Factura factura)
         {
             if (ModelState.IsValid)
             {
@@ -76,6 +90,8 @@ namespace TallerVehiculos.Controllers
                     else
                     {
                         ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                        //factura.Clientes = _combosHelper.GetComboClientes(factura.ClientesId);
+                        //factura.Usuario = _combosHelper.GetComboUsuarios(factura.Usuariosid);
                     }
                 }
                 catch (Exception exception)

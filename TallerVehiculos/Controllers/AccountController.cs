@@ -168,7 +168,6 @@ namespace TallerVehiculos.Controllers
 
 
                 if (model.ImageFile != null)
-
                 {
 
                     imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
@@ -198,14 +197,13 @@ namespace TallerVehiculos.Controllers
 
 
                 LoginViewModel loginViewModel = new LoginViewModel
-
                 {
 
-                    Password = model.Password,
+                    //Password = model.Password,
 
-                    RememberMe = false,
+                    //RememberMe = false,
 
-                    Username = model.Username
+                    //Username = model.Username
 
                 };
 
