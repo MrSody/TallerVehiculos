@@ -12,7 +12,7 @@ using TallerVehiculos.Data;
 namespace TallerVehiculos.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    [Migration("20220522222235_TallerVehiculos")]
+    [Migration("20220525204408_TallerVehiculos")]
     partial class TallerVehiculos
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

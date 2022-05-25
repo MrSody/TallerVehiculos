@@ -39,7 +39,7 @@ namespace TallerVehiculos.Data.Entities {
         [Display(Name = "Image")]
         public string ImageFullPath => ImageId == Guid.Empty
             ? $"https://localhost:44390/images/noimage.png"
-            : $"https://tallervehiculosdemo.blob.core.windows.net/users/{ImageId}";
+            : $"https://tallervehiculos20220520150509.azurewebsites.net/users/{ImageId}";
 
 
         [Display(Name = "User Type")]

@@ -22,7 +22,7 @@ public class SeedDb
         await _context.Database.EnsureCreatedAsync();
         await CheckCountriesAsync();
         await CheckRolesAsync();
-        await CheckUserAsync("1010", "Brandon", "A", "prueba@prueba.com", "3000000000", "1", UserType.Admin);
+        await CheckUserAsync("1010", "Brandon", "A", "brandon@gmail.com", "3000000000", "1", UserType.Admin);
     }
 
     private async Task CheckCountriesAsync()

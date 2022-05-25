@@ -25,7 +25,7 @@ namespace TallerVehiculos
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<SeedDb>();
+            
             services.AddControllersWithViews();
 
             services.AddScoped<IBlobHelper, BlobHelper>();
@@ -33,11 +33,12 @@ namespace TallerVehiculos
             services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddScoped<ICombosHelper, CombosHelper>();
             services.AddScoped<IUserHelper, UserHelper>();
-
+            services.AddControllersWithViews();
 
             services.AddDbContext<AplicationDbContext>(cfg => {
                 cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+            services.AddTransient<SeedDb>();
 
             services.ConfigureApplicationCookie(options =>
             {
